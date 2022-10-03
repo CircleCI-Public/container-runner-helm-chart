@@ -1,0 +1,8 @@
+apiVersion: v2
+name: container-agent
+description: For deploying a CircleCI Container Agent
+icon: https://raw.githubusercontent.com/circleci/media/master/logo/build/horizontal_dark.1.png
+type: application
+
+version: <<semantic_version>> # set by CI
+appVersion: 3.0.0
