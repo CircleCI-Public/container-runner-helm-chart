@@ -143,6 +143,11 @@ agent:
   # The age of a Kubernetes object managed by container agent before the garbage collection deletes it
   kubeGCThreshold: "5h5m"
 
+  # Toggle autodetection of OS and CPU architecture to request the appropriate task-agent binary in a heterogeneous cluster.
+  # If toggled on, this requires container-agent to have certain cluster-wide permissions for nodes.
+  # If toggled off, the cluster is assumed to be homogeneous and the OS and architecture of container-agent are used.
+  autodetectPlatform: true
+
   # Name of the user provided secret containing resource class tokens. You can mix tokens from this secret
   # and in the secret created from tokens specified in the resourceClasses section below
   #
@@ -210,3 +215,29 @@ rbac:
     rules: []
   clusterRoleBinding:
     name: ""
+
+# Configuration values for the logging containers.
+# These containers run alongside service containers and stream their logs to the CircleCI UI
+logging:
+  image:
+    registry: ""
+    repository: "circleci/logging-collector"
+    tag: edge
+
+  # A service account with minimal permissions to collect the service container logs
+  serviceAccount:
+    create: true
+    name: "logging-collector"
+    annotations: {}
+
+    # The secret containing the service account token
+    secret:
+      name: "logging-collector-token"
+
+  rbac:
+    create: true
+    role:
+      name: "logging-collector"
+      rules: []
+    roleBinding:
+      name: "logging-collector"
