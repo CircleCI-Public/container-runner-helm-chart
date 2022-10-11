@@ -82,6 +82,14 @@ spec:
                     {{- if include "container-agent.create-secret" . -}}
                     {{- printf " %s" $fullName -}}
                     {{- end }}
+            {{- with .Values.logging.image }}
+            - name: KUBE_LOGGING_IMAGE
+              value: "{{- if .registry -}}{{ .registry }}/{{- end -}}{{ .repository }}:{{ .tag }}"
+            {{- end }}
+            - name: KUBE_LOGGING_SECRET
+              value: {{ .Values.logging.serviceAccount.secret.name | quote }}
+            - name: KUBE_AUTODETECT_PLATFORM
+              value: {{ .Values.agent.autodetectPlatform | quote }}
           livenessProbe: {{ toYaml .Values.agent.livenessProbe | nindent 12 }}
           readinessProbe: {{ toYaml .Values.agent.readinessProbe | nindent 12 }}
         {{- if .Values.agent.resources }}
