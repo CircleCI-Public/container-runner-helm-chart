@@ -12,7 +12,7 @@ agent:
     registry: ""
     repository: "circleci/container-agent"
     pullPolicy: Always
-    tag: "edge"
+    tag: "3"
 
   pullSecrets: []
 

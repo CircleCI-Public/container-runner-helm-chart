@@ -1,35 +1,11 @@
 #!/usr/bin/env bash
 set -eu -o pipefail
 
-_version=1.0.${CIRCLE_BUILD_NUM-0}-$(git rev-parse --short HEAD 2>/dev/null || echo latest)
-
 # This variable is used, but shellcheck can't tell.
 # shellcheck disable=SC2034
 help_version="Print version"
 version() {
-    echo "$_version"
-}
-
-# This variable is used, but shellcheck can't tell.
-# shellcheck disable=SC2034
-help_preprocess_helm="Used by CI to preprocess the Helm chart with the semantic version"
-preprocess-helm() {
-    set -x
-
-    if [[ -f ./target/version.txt ]]; then
-        ver=$(<./target/version.txt)
-    else
-        ver=$(version)
-    fi
-
-    # Remove the git hash from the version to generate a release SemVer
-    # Note that the MINOR version is the build number
-    semver=$(echo "${ver}" | cut -f1 -d"-")
-
-    # Below will preprocess the Helm chart files with substitutions.
-    # <<semantic_version>> will be replaced with the SemVer,
-    # and <<image_tag>> will be replaced with the image tag
-    sed -i "s/<<semantic_version>>.*/\"${semver}\"/g" ./*.yaml
+    grep version Chart.yaml | sed -nE 's/.*"(.*)".*/\1/p'
 }
 
 # This variable is used, but shellcheck can't tell.
