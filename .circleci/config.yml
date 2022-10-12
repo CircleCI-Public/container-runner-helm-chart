@@ -7,17 +7,16 @@ orbs:
 workflows:
   main-workflow:
     jobs:
-      - preprocess-helm:
-          context: org-global
+      - check-verison-bump
       - package-helm-chart:
           context: org-global
-          publish: false
+          publish: true
           filters:
             branches:
               only:
                 - main
           requires:
-            - preprocess-helm
+            - check-verison-bump
       - package-helm-chart:
           name: dry-run-package
           publish: false
@@ -28,16 +27,16 @@ workflows:
                 - main
                 - canary
           requires:
-            - preprocess-helm
+            - check-verison-bump
       - package-cloud-helm-chart:
-          publish: false
+          publish: true
           context: org-global
           filters:
             branches:
               only:
                 - main
           requires:
-            - preprocess-helm
+            - check-verison-bump
       - package-cloud-helm-chart:
           name: dry-run-package-cloud
           publish: false
@@ -48,27 +47,36 @@ workflows:
                 - main
                 - canary
           requires:
-            - preprocess-helm
+            - check-verison-bump
 
 jobs:
-  preprocess-helm:
+  check-verison-bump:
     docker:
-      - image: cimg/base:2021.04
+      - image: cimg/base:stable
     resource_class: medium
     steps:
       - checkout
-      - attach_workspace:
-          at: .
-      - run:
-          name: Preprocess Helm chart with the semantic version
-          command: ./do preprocess-helm
-      - run: ./do install-helm
-      - run: helm lint .
-      - persist_to_workspace:
-          root: .
-          paths:
-            - .
-      - notify_failing_main
+      - when:
+          condition:
+            equal: [ << pipeline.git.branch >>, main ]
+          steps:
+            - run: |
+                if [ "$(./do version)" == "$(git show HEAD^:Chart.yaml | grep version | sed -nE 's/.*"(.*)".*/\1/p')" ]; then
+                  exit 1
+                else
+                  exit 0
+                fi
+      - when:
+          condition:
+            not:
+              equal: [ << pipeline.git.branch >>, main]
+          steps:
+            - run: |
+                if [ "$(./do version)" == "$(git show main:Chart.yaml | grep version | sed -nE 's/.*"(.*)".*/\1/p')" ]; then
+                  exit 1
+                else
+                  exit 0
+                fi
 
   package-helm-chart:
     docker:
@@ -93,6 +101,7 @@ jobs:
           paths:
             - helm-package
       - notify_failing_main
+
   package-cloud-helm-chart:
     docker:
       - image: cimg/python:3.10
