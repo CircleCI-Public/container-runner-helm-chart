@@ -8,6 +8,41 @@ version() {
     grep version Chart.yaml | sed -nE 's/.*"(.*)".*/\1/p'
 }
 
+check-version-bump() {
+    branch=${1:?'git branch required'}
+
+    if [ "${branch}" == "main" ]; then
+        prev=HEAD^
+    else
+        prev=main
+    fi
+
+    if [ "$(git diff ${prev} HEAD ./templates)" != "" ] || [ "$(git diff ${prev} HEAD values.yaml)" != "" ]; then
+        if [ "$(./do version)" == "$(git show HEAD^:Chart.yaml | grep version | sed -nE 's/.*"(.*)".*/\1/p')" ]; then
+            exit 1
+        fi
+    fi
+}
+
+# This variable is used, but shellcheck can't tell.
+# shellcheck disable=SC2034
+help_provision_test='Used in CI to test provision container-agent on an EKS cluster'
+provision-test() {
+    set -x
+
+    echo 'Add the container agent helm chart repo'
+    helm repo add container-agent https://packagecloud.io/circleci/container-agent/helm
+    helm repo update
+
+    echo 'Connect to the "container-agent" Cluster'
+    aws eks update-kubeconfig --name container-agent
+
+    echo 'Dry run the Helm chart'
+    helm upgrade --install --dry-run container-agent container-agent/container-agent \
+        --set "agent.image.tag=edge" \
+        --set "agent.nodeSelector.kubernetes\.io/arch=amd64"
+}
+
 # This variable is used, but shellcheck can't tell.
 # shellcheck disable=SC2034
 help_package_helm="Package and upload the Helm chart to S3"
