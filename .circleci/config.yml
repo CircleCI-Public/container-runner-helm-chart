@@ -8,6 +8,9 @@ workflows:
   main-workflow:
     jobs:
       - check-verison-bump
+      - validate-helm-chart:
+          requires:
+            - check-verison-bump
       - package-helm-chart:
           context: org-global
           publish: true
@@ -16,6 +19,7 @@ workflows:
               only:
                 - main
           requires:
+            - validate-helm-chart
             - check-verison-bump
       - package-helm-chart:
           name: dry-run-package
@@ -36,6 +40,7 @@ workflows:
               only:
                 - main
           requires:
+            - validate-helm-chart
             - check-verison-bump
       - package-cloud-helm-chart:
           name: dry-run-package-cloud
@@ -56,27 +61,22 @@ jobs:
     resource_class: medium
     steps:
       - checkout
-      - when:
-          condition:
-            equal: [ << pipeline.git.branch >>, main ]
-          steps:
-            - run: |
-                if [ "$(./do version)" == "$(git show HEAD^:Chart.yaml | grep version | sed -nE 's/.*"(.*)".*/\1/p')" ]; then
-                  exit 1
-                else
-                  exit 0
-                fi
-      - when:
-          condition:
-            not:
-              equal: [ << pipeline.git.branch >>, main]
-          steps:
-            - run: |
-                if [ "$(./do version)" == "$(git show main:Chart.yaml | grep version | sed -nE 's/.*"(.*)".*/\1/p')" ]; then
-                  exit 1
-                else
-                  exit 0
-                fi
+      - run: ./do check-version-bump << pipeline.git.branch >>
+
+  validate-helm-chart:
+    docker:
+      - image: cimg/python:3.10
+    resource_class: medium
+    steps:
+      - checkout
+      - aws-cli/setup:
+          profile-name: cci
+          aws-access-key-id: BINARY_S3_AWS_ACCESS_KEY_ID
+          aws-secret-access-key: BINARY_S3_AWS_SECRET_ACCESS_KEY
+      - run: ./do install-helm
+      - run: helm lint
+      - run: ./do provision-test
+      - notify_failing_main
 
   package-helm-chart:
     docker:
