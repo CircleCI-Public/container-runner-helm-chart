@@ -54,7 +54,11 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 RBAC names
 */}}
 {{- define "container-agent.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create }}
 {{- default (include "container-agent.fullname" .) .Values.serviceAccount.name }}
+{{- else }}
+{{- default "default" .Values.serviceAccount.name}}
+{{- end }}
 {{- end }}
 
 {{- define "container-agent.roleName" -}}
