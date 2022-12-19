@@ -24,9 +24,7 @@ spec:
         - {{ toYaml . }}
       {{- end}}
     {{- end }}
-    {{- if .Values.serviceAccount.create }}
       serviceAccountName: {{ include "container-agent.serviceAccountName" . }}
-    {{- end }}
     {{- if .Values.agent.podSecurityContext }}
       securityContext: {{- toYaml .Values.agent.podSecurityContext | nindent 8 }}
     {{- end }}

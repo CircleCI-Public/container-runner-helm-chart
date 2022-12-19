@@ -62,7 +62,7 @@ roleRef:
   kind: ClusterRole
   name: {{ include "container-agent.clusterRoleName" . }}
 {{- end }} # if .Values.agent.autodetectPlatform
-{{- end }} # if rbac.create
+{{- end }}
 {{- if .Values.logging.rbac.create }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
