@@ -35,9 +35,34 @@ spec:
         - name: taskpod-config
           configMap:
             name: {{ include "container-agent.fullname" . }}
+        {{- if .Values.agent.debug.enabled }}
+        - name: {{ .Values.agent.debug.logger.logVolume }}
+        {{- end }}
+      {{- if .Values.agent.debug.enabled }}
+      initContainers:
+         - name: "logger-init"
+           image: docker.io/alpine:3
+           command: ["/bin/sh", "-c", "touch {{ .Values.agent.debug.logger.logPath }}"]
+           volumeMounts:
+            - name: {{ .Values.agent.debug.logger.logVolume }}
+              mountPath: {{ .Values.agent.debug.logger.logDir }}
+      {{- end }}
       containers:
+        {{- if .Values.agent.debug.enabled }}
+        - name: "{{ .Chart.Name  }}-logger"
+          command: ["tail", "-F", "{{ .Values.agent.debug.logger.logPath }}"]
+          image: {{ .Values.agent.debug.logger.image }}
+          imagePullPolicy: {{ .Values.agent.debug.logger.imagePullPolicy }}
+          volumeMounts:
+            - name: {{ .Values.agent.debug.logger.logVolume }}
+              mountPath: {{ .Values.agent.debug.logger.logDir }}
+        {{- end }}
         - name: {{ .Chart.Name }}
+          {{- if .Values.agent.debug.enabled }}
+          command: ["/bin/sh", "-c", "/container-agent >{{ .Values.agent.debug.logger.logPath }} 2>&1"] 
+          {{- else }}
           command: ["./container-agent"]
+          {{- end }}
           {{- with .Values.agent.image }}
           image: "{{- if .registry -}}{{ .registry }}/{{- end -}}{{ .repository }}:{{ .tag }}"
           {{- end }}
@@ -48,6 +73,10 @@ spec:
           volumeMounts:
             - name: taskpod-config
               mountPath: /etc/container-agent
+          {{- if .Values.agent.debug.enabled }}
+            - name: {{ .Values.agent.debug.logger.logVolume }}
+              mountPath: {{ .Values.agent.debug.logger.logDir }}
+          {{- end }}
           env:
             - name: RUNNER_API
               value: {{ .Values.agent.runnerAPI }}

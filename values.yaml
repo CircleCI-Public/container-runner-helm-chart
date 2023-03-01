@@ -53,6 +53,15 @@ agent:
     successThreshold: 1
     failureThreshold: 3
 
+  debug: 
+    enabled: false
+    logger:
+      logVolume: "agent-logs"
+      logDir: "/var/log/container-runner"
+      logPath: "/var/log/container-runner/logs"
+      image: "docker.io/alpine:3"
+      imagePullPolicy: "Always"
+
   # Agent pod resource configuration
   # Ref: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
   resources: {}

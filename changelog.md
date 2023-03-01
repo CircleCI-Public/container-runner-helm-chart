@@ -2,10 +2,15 @@
 
 This is the Container Agent Helm Chart changelog
 
+## 100.0.2
+
+* Add in capability for log collecting side car for debugging
+
+
 ## 100.0.1
 
-Set custom service account even if `create` is set to `false` ([PR #5](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/5))
+* Set custom service account even if `create` is set to `false` ([PR #5](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/5))
 
 ## 100.0.0 
 
-Initial release of helm chart
+* Initial release of helm chart
