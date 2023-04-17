@@ -10,9 +10,9 @@ agent:
 
   image:
     registry: ""
-    repository: "circleci/runner-agent"
+    repository: "circleci/container-agent"
     pullPolicy: Always
-    tag: "kubernetes-3"
+    tag: "3"
 
   pullSecrets: []
 
