@@ -37,7 +37,6 @@ spec:
             name: {{ include "container-agent.fullname" . }}
       containers:
         - name: {{ .Chart.Name }}
-          command: ["./container-agent"]
           {{- with .Values.agent.image }}
           image: "{{- if .registry -}}{{ .registry }}/{{- end -}}{{ .repository }}:{{ .tag }}"
           {{- end }}
