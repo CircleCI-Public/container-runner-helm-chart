@@ -2,6 +2,10 @@
 
 This is the Container Agent Helm Chart changelog
 
+# 101.0.1
+
+Remove command from agent pod spec to use command specified in the image Dockerfile
+
 # 101.0.0
 
 Update default image repository to `circleci/runner-agent`
