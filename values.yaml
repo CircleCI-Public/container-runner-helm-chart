@@ -154,7 +154,7 @@ agent:
   # The tokens should be specified as secret key-value pairs of the form
   # ResourceClass: Token
   # The resource class name needs to match the names configured below exactly to match tokens to the correct configuration
-  # As Kubernetes does not allow / in secret keys, a period (.) should be substituted instead 
+  # As Kubernetes does not allow / in secret keys, a period (.) should be substituted instead
   customSecret: ""
 
   # Resource class settings. The tokens specified here will be used to claim tasks & the tasks
@@ -179,11 +179,11 @@ agent:
     #       - name: my_cred
     # circleci-runner/resourceClass2:
     #   token: XXXX
-    #   spec: 
+    #   spec:
     #     imagePullSecrets:
     #       - name: "other"
 
-  ## Resource class constraint validation checker settings. The checker will periodically validate the 
+  ## Resource class constraint validation checker settings. The checker will periodically validate the
   ## node constraints in the resource class spec to ensure task pods can be scheduled before claiming tasks
   constraintChecker:
     # Enable constraint checking (This requires at least List Node permissions)
@@ -191,7 +191,7 @@ agent:
 
     # Number of failed checks before disabling task claim
     threshold: 3
-  
+
     # Check interval
     interval: 15m
 
@@ -205,16 +205,14 @@ serviceAccount:
 # Kubernetes Roles Based Access Control settings
 rbac:
   create: true
-  role:
-    name: ""
-    rules: []
-  roleBinding:
-    name: ""
-  clusterRole:
-    name: ""
-    rules: []
-  clusterRoleBinding:
-    name: ""
+  roles:
+    - name: ""
+      rules: []
+      namespace: ""
+  clusterRoles:
+    - name: ""
+      rules: []
+      namespace: ""
 
 # Configuration values for the logging containers.
 # These containers run alongside service containers and stream their logs to the CircleCI UI
@@ -239,5 +237,3 @@ logging:
     role:
       name: "logging-collector"
       rules: []
-    roleBinding:
-      name: "logging-collector"

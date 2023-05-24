@@ -61,20 +61,12 @@ RBAC names
 {{- end }}
 {{- end }}
 
-{{- define "container-agent.roleName" -}}
-{{- default (include "container-agent.fullname" .) .Values.rbac.role.name }}
+{{- define "container-agent.logging.serviceAccountName" -}}
+{{- if .Values.logging.serviceAccount.create }}
+{{- default (include "container-agent.fullname" .) .Values.logging.serviceAccount.name }}
+{{- else }}
+{{- "default"}}
 {{- end }}
-
-{{- define "container-agent.roleBindingName" -}}
-{{- default (include "container-agent.fullname" .) .Values.rbac.roleBinding.name }}
-{{- end }}
-
-{{- define "container-agent.clusterRoleName" -}}
-{{- default (include "container-agent.fullname" .) .Values.rbac.clusterRole.name }}
-{{- end }}
-
-{{- define "container-agent.clusterRoleBindingName" -}}
-{{- default (include "container-agent.fullname" .) .Values.rbac.clusterRoleBinding.name }}
 {{- end }}
 
 {{- define "container-agent.tokens" -}}
