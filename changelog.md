@@ -2,6 +2,10 @@
 
 This is the Container Agent Helm Chart changelog
 
+# 101.0.2
+
+Break RBAC template into two seperate template files, cleanup whitespace
+
 # 101.0.1
 
 Remove command from agent pod spec to use command specified in the image Dockerfile
