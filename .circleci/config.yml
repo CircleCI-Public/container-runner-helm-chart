@@ -7,20 +7,10 @@ orbs:
 workflows:
   main-workflow:
     jobs:
-      - check-verison-bump
+      - check-version-bump
       - validate-helm-chart:
           requires:
-            - check-verison-bump
-      - package-helm-chart:
-          context: org-global
-          publish: true
-          filters:
-            branches:
-              only:
-                - main
-          requires:
-            - validate-helm-chart
-            - check-verison-bump
+            - check-version-bump
       - package-helm-chart:
           name: dry-run-package
           publish: false
@@ -31,7 +21,7 @@ workflows:
                 - main
                 - canary
           requires:
-            - check-verison-bump
+            - check-version-bump
       - package-cloud-helm-chart:
           publish: true
           context: org-global
@@ -41,7 +31,7 @@ workflows:
                 - main
           requires:
             - validate-helm-chart
-            - check-verison-bump
+            - check-version-bump
       - package-cloud-helm-chart:
           name: dry-run-package-cloud
           publish: false
@@ -52,10 +42,10 @@ workflows:
                 - main
                 - canary
           requires:
-            - check-verison-bump
+            - check-version-bump
 
 jobs:
-  check-verison-bump:
+  check-version-bump:
     docker:
       - image: cimg/base:stable
     resource_class: medium
