@@ -28,7 +28,7 @@ roleRef:
   kind: ClusterRole
   name: {{ $name }}
 
-{{- range $clusterRole := .Values.rbac.clusterRoles }}
+{{- $clusterRole := .Values.rbac.clusterRole }}
 {{- if $clusterRole.rules }}
 {{- $name := join "-" (compact (list $fullname $clusterRole.name )) }}
 ---
@@ -52,6 +52,5 @@ roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
   name: {{ $name }}
-{{- end }}
 {{- end }}
 {{- end }}

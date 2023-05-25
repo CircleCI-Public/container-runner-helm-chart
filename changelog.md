@@ -2,7 +2,11 @@
 
 This is the Container Agent Helm Chart changelog
 
-# 101.0.2
+# 101.0.3
+
+Revert breaking change in 101.2 that required a list for roles and cluster roles
+                                       
+# 101.0.2                              
 
 Break RBAC template into two seperate template files, cleanup whitespace
 
