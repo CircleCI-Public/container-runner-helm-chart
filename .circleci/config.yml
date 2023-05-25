@@ -11,17 +11,6 @@ workflows:
       - validate-helm-chart:
           requires:
             - check-version-bump
-      - package-helm-chart:
-          name: dry-run-package
-          publish: false
-          context: org-global
-          filters:
-            branches:
-              ignore:
-                - main
-                - canary
-          requires:
-            - check-version-bump
       - package-cloud-helm-chart:
           publish: true
           context: org-global
@@ -66,30 +55,6 @@ jobs:
       - run: ./do install-helm
       - run: helm lint
       - run: ./do provision-test
-      - notify_failing_main
-
-  package-helm-chart:
-    docker:
-      - image: cimg/python:3.10
-    resource_class: medium
-    parameters:
-      publish:
-        type: boolean
-        default: true
-    steps:
-      - checkout
-      - attach_workspace:
-          at: .
-      - aws-cli/setup:
-          profile-name: cci
-          aws-access-key-id: BINARY_S3_AWS_ACCESS_KEY_ID
-          aws-secret-access-key: BINARY_S3_AWS_SECRET_ACCESS_KEY
-      - run: ./do install-helm
-      - run: ./do package-helm << parameters.publish >>
-      - persist_to_workspace:
-          root: .
-          paths:
-            - helm-package
       - notify_failing_main
 
   package-cloud-helm-chart:
