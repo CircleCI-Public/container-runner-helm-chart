@@ -39,8 +39,19 @@ provision-test() {
 
     echo 'Dry run the Helm chart'
     helm upgrade --install --dry-run container-agent container-agent/container-agent \
-        --set "agent.image.tag=edge" \
-        --set "agent.nodeSelector.kubernetes\.io/arch=amd64"
+        --set "agent.name=dry-run" \
+        --set "agent.image.tag=kubernetes-edge" \
+        --set "agent.nodeSelector.kubernetes\.io/arch=amd64" \
+        --set "agent.rbac.role.name=TestRole" \
+        --set "agent.rbac.role.binding=TestRole" \
+        --set "agent.pullSecrets[0].name=regcred" \
+        --set "agent.image.repository=circleci/runner-agent" \
+        --set "agent.terminationGracePeriodSeconds=60" \
+        --set "agent.nodeSelector.kubernetes\.io/arch=arm64" \
+        --set "rbac.clusterRoleBinding.name=TestClusterRole" \
+        --set "rbac.clusterRole.name=TestClusterRole" \
+        --set "logging.image.repository=circleci/logging-collector" \
+        --set "logging.image.tag=edge"
 }
 
 # This variable is used, but shellcheck can't tell.

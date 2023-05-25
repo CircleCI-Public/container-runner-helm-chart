@@ -205,14 +205,14 @@ serviceAccount:
 # Kubernetes Roles Based Access Control settings
 rbac:
   create: true
-  roles:
-    - name: ""
-      rules: []
-      namespace: ""
-  clusterRoles:
-    - name: ""
-      rules: []
-      namespace: ""
+  role:
+    name: ""
+    rules: []
+    namespace: ""
+  clusterRole:
+    name: ""
+    rules: []
+    namespace: ""
 
 # Configuration values for the logging containers.
 # These containers run alongside service containers and stream their logs to the CircleCI UI
