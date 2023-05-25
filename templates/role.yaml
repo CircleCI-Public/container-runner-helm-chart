@@ -1,10 +1,9 @@
+{{- $serviceAccountName := include "container-agent.serviceAccountName" . }}
 {{- $namespace := .Release.Namespace | quote }}
 {{- $fullname := include "container-agent.fullname" . }}
-
 {{- if .Values.rbac.create }}
-{{- $name := printf "%s-%s" $fullname "default" }}
-{{- $serviceAccountName := include "container-agent.serviceAccountName" . }}
----
+{{- $role := .Values.rbac.role }}
+{{- $name := printf "%s:%s" $fullname $role.name | quote }}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
@@ -20,6 +19,9 @@ rules:
   - apiGroups: ["", "events.k8s.io/v1"]
     resources: ["events"]
     verbs: ["watch"]
+{{- if $role.rules }}
+  {{- toYaml $role.rules | indent 2 }}
+{{- end }} # if $role.rules
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
@@ -34,62 +36,36 @@ roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
   name: {{ $name }}
-
-{{- $role := .Values.rbac.role }}
-{{- if $role.rules }}
-{{- $name := join "-" (compact (list $fullname $role.name )) }}
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
-metadata:
-  name: {{ $name }}
-  namespace: {{ $role.namespace | default $namespace }}
-rules:
-{{ toYaml $role.rules | indent 2 }}
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: {{ $name }}
-  namespace: {{ $role.namespace | default $namespace }}
-subjects:
-  - kind: ServiceAccount
-    name: {{ $serviceAccountName }}
-    namespace: {{ $namespace }}
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: Role
-  name: {{ $name }}
-{{- end }}
-{{- end }}
+{{- end }} # if .Values.rbac.create
 
 {{- if .Values.logging.rbac.create }}
-{{- $name := printf "%s-%s" $fullname .Values.logging.rbac.role.name }}
+{{- $loggingRole := .Values.logging.rbac.role }}
+{{- $loggingName := printf "%s:%s" $fullname $loggingRole.name }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: {{ $name }}
+  name: {{ $loggingName }}
   namespace: {{ $namespace }}
 rules:
   - apiGroups: [""]
     resources: ["pods", "pods/log"]
     verbs: ["watch"]
-{{- if .Values.logging.rbac.role.rules }}
-  {{- toYaml .Values.logging.rbac.role.rules | indent 2 }}
+{{- if $loggingRole.rules }}
+  {{- toYaml $loggingRole.rules | indent 2 }}
 {{- end }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: {{ $name }}
+  name: {{ $loggingName }}
   namespace: {{ $namespace }}
 subjects:
   - kind: ServiceAccount
-    name: {{ include "container-agent.logging.serviceAccountName" . }}
+    name: {{ $serviceAccountName }}
     namespace: {{ $namespace }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: {{ $name }}
-{{- end }}
+  name: {{ $loggingName }}
+{{- end }} # if .Values.logging.rbac.create

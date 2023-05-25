@@ -1,43 +1,23 @@
+{{- if .Values.agent.autodetectPlatform }}
+{{- $clusterRole :=  .Values.rbac.clusterRole }}
+{{- $clusterRoleName := $clusterRole.name | quote }}
 {{- $namespace := .Release.Namespace | quote }}
 {{- $fullname := include "container-agent.fullname" . }}
-
-{{- if and .Values.rbac.create .Values.agent.autodetectPlatform }}
-{{- $name := printf "%s-%s" $fullname "default" }}
+{{- $name := printf "%s:%s" $fullname $clusterRoleName | quote }}
 {{- $serviceAccountName := include "container-agent.serviceAccountName" . }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: {{ $name }}
+  namespace: {{ $namespace }}
 rules:
   - apiGroups: [""]
     resources: ["nodes"]
     verbs: ["get", "list"]
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  name: {{ $name }}
-  namespace: {{ $namespace }}
-subjects:
-  - kind: ServiceAccount
-    name: {{ $serviceAccountName }}
-    namespace: {{ $namespace }}
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: {{ $name }}
-
-{{- $clusterRole := .Values.rbac.clusterRole }}
 {{- if $clusterRole.rules }}
-{{- $name := join "-" (compact (list $fullname $clusterRole.name )) }}
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  name: {{ $name }}
-rules:
-{{ toYaml $clusterRole.rules | indent 2 }}
+  {{- toYaml $clusterRole.rules | indent 2 }}
+{{- end }} # if $clusterRole.rules
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -52,5 +32,4 @@ roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
   name: {{ $name }}
-{{- end }}
-{{- end }}
+{{- end }} # if .Values.agent.autodetectPlatform
