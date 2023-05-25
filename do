@@ -64,7 +64,7 @@ package-helm() {
 
     [[ -z ${S3_HELM_BUCKET+z} ]] && echo 'S3_HELM_BUCKET required' && exit 1
 
-    mkdir helm-package
+    mkdir -p helm-package
     cd helm-package
 
     echo 'Package Helm chart and generate index file'
@@ -79,6 +79,7 @@ package-helm() {
     if [ "${publish}" == true ]; then
         aws --profile cci s3 cp ./index.yaml "s3://${S3_HELM_BUCKET}/charts/"
         aws --profile cci s3 cp ./container-agent-*.tgz "s3://${S3_HELM_BUCKET}/charts/container-agent/"
+        cat ./index.yaml
     else
         echo 'Not publishing to S3'
     fi

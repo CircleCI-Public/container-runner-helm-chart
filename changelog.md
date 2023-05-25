@@ -2,6 +2,10 @@
 
 This is the Container Agent Helm Chart changelog
 
+# 101.0.4
+
+Simplify rbac implementation, avoid cluster role collision
+
 # 101.0.3
 
 Revert breaking change in 101.2 that required a list for roles and cluster roles
