@@ -2,6 +2,11 @@
 
 This is the Container Agent Helm Chart changelog
 
+# 101.0.5
+
+- Fix `logging-collector` RBAC permissions
+- Annotate the correct service account name on the `logging-collector-token` secret
+
 # 101.0.4
 
 Simplify rbac implementation, avoid cluster role collision

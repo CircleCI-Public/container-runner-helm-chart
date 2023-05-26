@@ -39,6 +39,7 @@ roleRef:
 {{- end }} # if .Values.rbac.create
 
 {{- if .Values.logging.rbac.create }}
+{{- $loggingServiceAccountName := include "container-agent.logging.serviceAccountName" . }}
 {{- $loggingRole := .Values.logging.rbac.role }}
 {{- $loggingName := printf "%s:%s" $fullname $loggingRole.name }}
 ---
@@ -49,8 +50,11 @@ metadata:
   namespace: {{ $namespace }}
 rules:
   - apiGroups: [""]
-    resources: ["pods", "pods/log"]
+    resources: ["pods"]
     verbs: ["watch"]
+  - apiGroups: [""]
+    resources: ["pods/log"]
+    verbs: ["get"]
 {{- if $loggingRole.rules }}
   {{- toYaml $loggingRole.rules | indent 2 }}
 {{- end }}
@@ -62,7 +66,7 @@ metadata:
   namespace: {{ $namespace }}
 subjects:
   - kind: ServiceAccount
-    name: {{ $serviceAccountName }}
+    name: {{ $loggingServiceAccountName }}
     namespace: {{ $namespace }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
