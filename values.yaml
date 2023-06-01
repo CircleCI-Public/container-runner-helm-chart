@@ -8,11 +8,13 @@
 agent:
   replicaCount: 1
 
+  # Agent image settings. NOTE: Setting an image digest will take precedence over the image tag
   image:
     registry: ""
     repository: "circleci/runner-agent"
     pullPolicy: Always
     tag: "kubernetes-3"
+    digest: ""
 
   pullSecrets: []
 
@@ -27,6 +29,9 @@ agent:
 
   # Security Context policies for agent containers
   containerSecurityContext: {}
+
+  # Force a rolling update of the agent deployment
+  forceUpdate: false
 
   # Liveness and readiness probe values
   # Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes

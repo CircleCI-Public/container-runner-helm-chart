@@ -64,8 +64,10 @@ The following tables list the configurable parameters of the `container-agent` h
 | agent.replicaCount                          | Number of container agents to deploy                    | `1`                        |
 | agent.image.registry                        | Agent image registry                                    | `""`                       |
 | agent.image.repository                      | Agent image repository                                  | `circleci/container-agent` |
-| agent.pullPolicy                            | Agent image pull policy                                 | `IfNotPresent`             |
-| agent.tag                                   | Agent image tag                                         | `latest`                   |
+| agent.image.repository                      | Agent image tag                                         | `kubernetes-3`             |
+| agent.image.digest                          | Agent image digest (NOTE: Overrides tag)                | `""`                       |
+| agent.image.pullPolicy                      | Agent image pull policy                                 | `Always`                   |
+| agent.forceUpdate                           | Force a rolling update of the agent deployment          | `false`                    |
 | agent.pullSecrets                           | Secret objects container private registry credentials   | `[]`                       |
 | agent.matchLabels                           | Match labels used on agent pods                         | `app: container-agent`     |
 | agent.podAnnotations                        | Extra annotations addded to agent pods                  | `{}`                       |
