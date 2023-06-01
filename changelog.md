@@ -2,6 +2,11 @@
 
 This is the Container Agent Helm Chart changelog
 
+# 101.0.6
+
+- Add `digest` paramater in `image` settings
+- Add `forceUpdate` option
+
 # 101.0.5
 
 - Fix `logging-collector` RBAC permissions

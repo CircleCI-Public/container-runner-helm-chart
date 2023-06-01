@@ -14,6 +14,9 @@ spec:
       labels: {{- toYaml .Values.agent.matchLabels | nindent 8 }}
       annotations:
         checksum/config: {{ .Values.agent.resourceClasses | toString | sha256sum }}
+        {{- if .Values.agent.forceUpdate }}
+        timestamp: {{ now | quote }}
+        {{- end }}
       {{- range $key, $value := .Values.agent.podAnnotations }}
         {{ $key }}: {{ $value | quote }}
       {{- end }}
@@ -38,7 +41,11 @@ spec:
       containers:
         - name: {{ .Chart.Name }}
           {{- with .Values.agent.image }}
+          {{- if .digest }}
+          image: "{{- if .registry -}}{{ .registry }}/{{- end -}}{{ .repository }}@sha256:{{ .digest }}"
+          {{- else }}
           image: "{{- if .registry -}}{{ .registry }}/{{- end -}}{{ .repository }}:{{ .tag }}"
+          {{- end }}
           {{- end }}
           imagePullPolicy: {{ .Values.agent.image.pullPolicy }}
         {{- if .Values.agent.containerSecurityContext }}
