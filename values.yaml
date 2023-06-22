@@ -123,7 +123,7 @@ agent:
   pdb:
     create: false
     minAvailable: 1
-    maxUnavailable: ""
+    maxUnavailable: 1
 
   # CircleCI Runner API URL
   runnerAPI: "https://runner.circleci.com"
@@ -155,6 +155,7 @@ agent:
 
   # Name of the user provided secret containing resource class tokens. You can mix tokens from this secret
   # and in the secret created from tokens specified in the resourceClasses section below
+  # Ref: https://circleci.com/docs/container-runner/#custom-secret
   #
   # The tokens should be specified as secret key-value pairs of the form
   # ResourceClass: Token
@@ -164,6 +165,7 @@ agent:
 
   # Resource class settings. The tokens specified here will be used to claim tasks & the tasks
   # will be launched with the configured configs
+  # Ref: https://circleci.com/docs/container-runner/#resource-class-configuration-custom-pod
   resourceClasses: {}
     # circleci-runner/resourceClass:
     #   token: XXXX

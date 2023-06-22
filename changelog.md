@@ -2,6 +2,10 @@
 
 This is the Container Agent Helm Chart changelog
 
+# 101.0.7
+
+- Update README with new parameters & add some documentation links to `values.yaml`
+
 # 101.0.6
 
 - Add `digest` paramater in `image` settings
@@ -20,7 +24,7 @@ Simplify rbac implementation, avoid cluster role collision
 
 Revert breaking change in 101.2 that required a list for roles and cluster roles
                                        
-# 101.0.2                              
+# 101.0.2
 
 Break RBAC template into two seperate template files, cleanup whitespace
 
