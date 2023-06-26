@@ -4,4 +4,4 @@
 # See GitHub docs for more:
 # https://help.github.com/articles/about-codeowners/
 
-* @CircleCI-Public/runner
+* @CircleCI-Public/on-prem
