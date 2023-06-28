@@ -1,0 +1,71 @@
+{{- if .Values.agent.ssh.isEnabled }}
+
+{{- $startPort := .Values.agent.ssh.startPort | int }}
+{{- $ports := untilStep $startPort (add $startPort .Values.agent.ssh.numPorts | int) 1 -}}
+{{- $namespace := .Release.Namespace | quote }}
+{{- $name := printf "%s-ssh" (include "container-agent.fullname" .) }}
+
+kind: GatewayClass
+apiVersion: gateway.networking.k8s.io/v1beta1
+metadata:
+  name: {{ $name }}
+  namespace: {{ $namespace }}
+spec:
+  controllerName: {{ .Values.agent.ssh.controllerName }}
+
+---
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: Gateway
+metadata:
+  name: {{ $name }}
+  namespace: {{ $namespace }}
+spec:
+  gatewayClassName: {{ $name }}
+  listeners:
+    {{- range $i, $port := $ports }}
+    - name: ssh-{{ $port }}
+      protocol: TCP
+      port: {{ $port }}
+      allowedRoutes:
+        kinds:
+          - kind: TCPRoute
+    {{- end }}
+
+---
+{{- range $i, $port := $ports }}
+{{ $portName := printf "ssh-%d" $port }}
+---
+apiVersion: gateway.networking.k8s.io/v1alpha2
+kind: TCPRoute
+metadata:
+  name: {{ $portName }}
+  namespace: {{ $namespace }}
+spec:
+  parentRefs:
+  - name: {{ $name }}
+    sectionName: {{ $portName }}
+  rules:
+  - backendRefs:
+    - name: {{ $name }}
+      port: {{ $port }}
+{{- end }}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $name }}
+  namespace: {{ $namespace }}
+spec:
+  selector:
+    app.kubernetes.io/managed-by: circleci-container-agent
+  ports:
+  {{- range $i, $port := $ports }}
+  {{ $portName := printf "ssh-%d" $port }}
+  - name: {{ $portName }}
+    protocol: TCP
+    port: {{ $port }}
+    targetPort: {{ $portName }}
+  {{- end }}
+
+{{- end }} # if .Values.agent.ssh.isEnabled
