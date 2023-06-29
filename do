@@ -18,7 +18,8 @@ check-version-bump() {
     fi
 
     if [ "$(git diff ${prev} HEAD ./templates)" != "" ] || [ "$(git diff ${prev} HEAD values.yaml)" != "" ]; then
-        if [ "$(./do version)" == "$(git show HEAD^:Chart.yaml | grep version | sed -nE 's/.*"(.*)".*/\1/p')" ]; then
+        set -x
+        if [ "$(./do version)" == "$(git show "${prev}:Chart.yaml" | grep version | sed -nE 's/.*"(.*)".*/\1/p')" ]; then
             exit 1
         fi
     fi
@@ -121,6 +122,23 @@ install-helm() {
   echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
   sudo apt-get update
   sudo apt-get install helm
+}
+
+# This variable is used, but shellcheck can't tell.
+# shellcheck disable=SC2034
+help_unit_tests="Run helm unittest"
+unit-tests() {
+    if ! [ -x "$(command -v helm)" ]; then
+        echo 'Helm is required. See: https://helm.sh/docs/intro/install/'
+        exit 1
+    fi
+
+    if ! helm plugin list | grep unittest >/dev/null; then
+        echo 'Installing helm unittest'
+        helm plugin install https://github.com/helm-unittest/helm-unittest.git
+    fi
+
+    helm unittest -f 'tests/*.yaml' . "$@"
 }
 
 help-text-intro() {

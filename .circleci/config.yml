@@ -41,6 +41,7 @@ jobs:
     steps:
       - checkout
       - run: ./do check-version-bump << pipeline.git.branch >>
+      - notify_failing_main
 
   validate-helm-chart:
     docker:
@@ -54,6 +55,7 @@ jobs:
           aws-secret-access-key: BINARY_S3_AWS_SECRET_ACCESS_KEY
       - run: ./do install-helm
       - run: helm lint
+      - run: ./do unit-tests
       - run: ./do provision-test
       - notify_failing_main
 

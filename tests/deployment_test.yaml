@@ -1,0 +1,16 @@
+suite: test deployment
+templates:
+  - deployment.yaml
+tests:
+  - it: should work
+    set:
+      agent.image.tag: kubernetes-edge
+    asserts:
+      - isKind:
+          of: Deployment
+      - matchRegex:
+          path: metadata.name
+          pattern: RELEASE-NAME-container-agent
+      - equal:
+          path: spec.template.spec.containers[0].image
+          value: circleci/runner-agent:kubernetes-edge
