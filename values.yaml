@@ -227,7 +227,7 @@ logging:
   image:
     registry: ""
     repository: "circleci/logging-collector"
-    tag: edge
+    tag: 3
 
   # A service account with minimal permissions to collect the service container logs
   serviceAccount:

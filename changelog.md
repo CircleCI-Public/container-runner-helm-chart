@@ -2,6 +2,10 @@
 
 This is the Container Agent Helm Chart changelog
 
+# 101.0.8
+
+- [#20](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/20) Use the current major release `3` tag instead of the rolling `edge` tag for the logging-collector image
+
 # 101.0.7
 
 - Update README with new parameters & add some documentation links to `values.yaml`
