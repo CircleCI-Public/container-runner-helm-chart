@@ -22,7 +22,7 @@ rules:
 
   {{- if .Values.agent.ssh.isEnabled }}
   - apiGroups: ["", "gateway.networking.k8s.io"]
-    resources: ["gateways", "services", "endpoints"]
+    resources: ["gateways", "services"]
     verbs: ["get"]
   {{- end }} # if .Values.agent.ssh.isEnabled
 

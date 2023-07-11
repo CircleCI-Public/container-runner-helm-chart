@@ -12,6 +12,12 @@ metadata:
   namespace: {{ $namespace }}
 spec:
   controllerName: {{ .Values.agent.ssh.controllerName }}
+  {{- with .Values.agent.ssh.parametersRef }}
+  parametersRef:
+    group: {{ .group }}
+    kind: {{ .kind }}
+    name: {{ .name }}
+  {{- end }}
 
 ---
 apiVersion: gateway.networking.k8s.io/v1beta1

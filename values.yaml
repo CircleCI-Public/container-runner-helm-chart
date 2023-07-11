@@ -213,6 +213,7 @@ agent:
     # Please consult the documentation for your preferred Gateway implementation for guidance on setting it up in your cluster.
     # The Envoy Gateway has been successfully tested for SSH reruns (see: https://gateway.envoyproxy.io/v0.4.0/user/tcp-routing.html).
     controllerName: "gateway.envoyproxy.io/gatewayclass-controller"
+    parametersRef: {}
 
     # -- Specify the port range that is approved for SSH connections.
     # Note that the number of concurrent jobs rerun with SSH is limited by the number of ports in this range.
