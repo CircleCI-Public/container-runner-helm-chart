@@ -14,3 +14,33 @@ tests:
       - equal:
           path: spec.template.spec.containers[0].image
           value: circleci/runner-agent:kubernetes-edge
+
+  - it: should have the default logging collector configuration
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: KUBE_LOGGING_IMAGE
+            value: "circleci/logging-collector:3"
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: KUBE_LOGGING_SECRET
+            value: "logging-collector-token"
+  - it: should override the default logging collector configuration
+    set:
+      logging.image.registry: foo
+      logging.image.repository: bar
+      logging.image.tag: baz
+      logging.serviceAccount.secret.name: my-custom-secret
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: KUBE_LOGGING_IMAGE
+            value: "foo/bar:baz"
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: KUBE_LOGGING_SECRET
+            value: "my-custom-secret"
