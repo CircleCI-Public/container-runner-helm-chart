@@ -1,0 +1,24 @@
+# Learn more about these files at:
+# https://circleci.atlassian.net/l/cp/zvCUepEC
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: circle-storage
+  description: This is the helm chart repository for deploying container runner to kubernetes environments
+  annotations:
+    circleci.com/project-slug: github/CircleCI-Public/container-runner-helm-chart
+    jira/project-key: ON-PREM
+    pagerduty.com/service-id: PM7SMHG
+  links:
+    - title: Documentation
+      url: https://github.com/CircleCI-Public/container-runner-helm-chart/blob/main/README.md
+      icon: docs
+  tags:
+    - runner
+    - helm
+    - container runner
+spec:
+  type: service
+  lifecycle: production
+  owner: on-prem
