@@ -8,7 +8,7 @@ metadata:
   description: This is the helm chart repository for deploying container runner to kubernetes environments
   annotations:
     circleci.com/project-slug: github/CircleCI-Public/container-runner-helm-chart
-    jira/project-key: ON-PREM
+    jira/project-key: ONPREM
     pagerduty.com/service-id: PM7SMHG
   links:
     - title: Documentation
