@@ -14,6 +14,9 @@ metadata:
     - title: Documentation
       url: https://github.com/CircleCI-Public/container-runner-helm-chart/blob/main/README.md
       icon: docs
+          - title: Slack
+      url: 'slack://channel?team=T02519B3Z&id=CKCV4LZ8V'
+      icon: chat
   tags:
     - runner
     - helm
