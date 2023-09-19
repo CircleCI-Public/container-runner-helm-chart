@@ -92,7 +92,7 @@ commands:
 
             curl --fail -H 'Content-type: application/json' --data @<(jq -n \
               --arg project_repo_name "$CIRCLE_PROJECT_REPONAME" \
-              --arg user_name "$CIRCLE_BUILD_NUM" \
+              --arg user_name "$CIRCLE_USERNAME" \
               --arg build_number "$CIRCLE_BUILD_NUM" \
               --arg build_url "$CIRCLE_BUILD_URL" \
               --arg commit_msg "$(git show -s --format=%s HEAD | jq -R . | sed -e 's/^"//' -e 's/"$//')" \
