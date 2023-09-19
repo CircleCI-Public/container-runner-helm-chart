@@ -61,6 +61,9 @@ jobs:
           at: .
       - run: gem install --no-document package_cloud
       - run: ./do publish
+      - notify_slack:
+          header: ":helm: :circleci-runner: Container runner Helm chart published"
+          version: "$(./do version)"
       - notify_failing_main
 
 commands:
@@ -71,3 +74,34 @@ commands:
           branch_pattern: main
           event: fail
           template: basic_fail_1
+
+  notify_slack:
+    parameters:
+      header:
+        type: string
+      version:
+        type: string
+    steps:
+      - run:
+          name: Slack Notification
+          command: |
+            if [ -z "${SLACK_WEBHOOK}" ]; then
+              printf "Error: Environment variable SLACK_WEBHOOK is not set\n"
+              exit 1
+            fi
+
+            curl --fail -H 'Content-type: application/json' --data @<(jq -n \
+              --arg project_repo_name "$CIRCLE_PROJECT_REPONAME" \
+              --arg user_name "$CIRCLE_BUILD_NUM" \
+              --arg build_number "$CIRCLE_BUILD_NUM" \
+              --arg build_url "$CIRCLE_BUILD_URL" \
+              --arg commit_msg "$(git show -s --format=%s HEAD | jq -R . | sed -e 's/^"//' -e 's/"$//')" \
+              --arg version "<< parameters.version >>" \
+              '{
+                "blocks": [
+                  { "type": "header", "text": { "type": "plain_text", "text": "<< parameters.header >>", "emoji": true }},
+                  { "type": "section", "fields": [ { "type": "mrkdwn", "text": "*Project:*\n\($project_repo_name)"}, { "type": "mrkdwn", "text": "*Author:*\n\($user_name)"} ] },
+                  { "type": "section", "fields": [ { "type": "mrkdwn", "text": "*Version:*\n\($version)"}, { "type": "mrkdwn", "text": "*CircleCI Build:*\n<\($build_url)|\($build_number)>" } ] },
+                  { "type": "section", "text": { "type": "mrkdwn", "text": "*Commit Message:*\n\($commit_msg)" } }
+                ]
+              }') "${SLACK_WEBHOOK}"
