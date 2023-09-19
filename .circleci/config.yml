@@ -1,85 +1,66 @@
 version: 2.1
 
 orbs:
-  slack: circleci/slack@4.10.1
-  aws-cli: circleci/aws-cli@0.1.20
+  slack: circleci/slack@4.12.5
 
 workflows:
   main-workflow:
     jobs:
-      - check-version-bump
-      - validate-helm-chart:
-          requires:
-            - check-version-bump
-      - package-cloud-helm-chart:
-          publish: true
-          context: org-global
+      - validate
+      - package
+
+      - approve-publish:
+          type: approval
           filters:
             branches:
-              only:
-                - main
-          requires:
-            - validate-helm-chart
-            - check-version-bump
-      - package-cloud-helm-chart:
-          name: dry-run-package-cloud
-          publish: false
-          context: org-global
-          filters:
-            branches:
-              ignore:
-                - main
-                - canary
-          requires:
-            - check-version-bump
+              only: [ main ]
+          requires: [ validate, package ]
+      - publish:
+          context: runner-deploy
+          requires: [ approve-publish ]
+
+executors:
+  helm:
+    docker:
+      - image: cimg/deploy:2023.09
+  ruby:
+    docker:
+      - image: cimg/ruby:3.2.2
 
 jobs:
-  check-version-bump:
-    docker:
-      - image: cimg/base:stable
+  validate:
+    executor: helm
     resource_class: medium
     steps:
       - checkout
-      - run: ./do check-version-bump << pipeline.git.branch >>
-      - notify_failing_main
-
-  validate-helm-chart:
-    docker:
-      - image: cimg/python:3.10
-    resource_class: medium
-    steps:
-      - checkout
-      - aws-cli/setup:
-          profile-name: cci
-          aws-access-key-id: BINARY_S3_AWS_ACCESS_KEY_ID
-          aws-secret-access-key: BINARY_S3_AWS_SECRET_ACCESS_KEY
-      - run: ./do install-helm
+      - run: ./do check-version-bump
       - run: helm lint
+      - run: helm template --debug .
       - run: ./do unit-tests
-      - run: ./do provision-test
       - notify_failing_main
 
-  package-cloud-helm-chart:
-    docker:
-      - image: cimg/python:3.10
+  package:
+    executor: helm
     resource_class: medium
-    parameters:
-      publish:
-        type: boolean
-        default: true
     steps:
       - checkout
       - attach_workspace:
           at: .
-      - aws-cli/setup:
-          profile-name: cci
-          aws-access-key-id: BINARY_S3_AWS_ACCESS_KEY_ID
-          aws-secret-access-key: BINARY_S3_AWS_SECRET_ACCESS_KEY
-      - run: sudo apt update
-      - run: ./do install-helm
-      - run: sudo apt install ruby-dev
-      - run: sudo gem install package_cloud
-      - run: ./do package-cloud-helm << parameters.publish >>
+      - run: ./do package
+      - persist_to_workspace:
+          root: .
+          paths: [ ./target ]
+      - notify_failing_main
+
+  publish:
+    executor: ruby
+    resource_class: medium
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run: gem install --no-document package_cloud
+      - run: ./do publish
       - notify_failing_main
 
 commands:
