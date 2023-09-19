@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -eu -o pipefail
+set -euo pipefail
 
 # This variable is used, but shellcheck can't tell.
 # shellcheck disable=SC2034
@@ -8,94 +8,26 @@ version() {
     grep version Chart.yaml | sed -nE 's/.*"(.*)".*/\1/p'
 }
 
+# This variable is used, but shellcheck can't tell.
+# shellcheck disable=SC2034
+package_helm="Check that the version has been updated in the Helm chart"
 check-version-bump() {
-    branch=${1:?'git branch required'}
+    previous_commit=$( [ "$(git rev-parse --abbrev-ref HEAD)" == "main" ] && echo 'HEAD^' || echo 'main' )
 
-    if [ "${branch}" == "main" ]; then
-        prev=HEAD^
-    else
-        prev=main
-    fi
+    if ! git diff --quiet "${previous_commit}" HEAD -- ./templates ./values.yaml \
+        && [ "$(version)" == "$(git show "${previous_commit}:Chart.yaml" | grep version | sed -nE 's/.*"(.*)".*/\1/p')" ]; then
 
-    if [ "$(git diff ${prev} HEAD ./templates)" != "" ] || [ "$(git diff ${prev} HEAD values.yaml)" != "" ]; then
-        set -x
-        if [ "$(./do version)" == "$(git show "${prev}:Chart.yaml" | grep version | sed -nE 's/.*"(.*)".*/\1/p')" ]; then
-            exit 1
-        fi
+        echo "Error: the templates or values file have been modified, but the chart version hasn't been updated to reflect that"
+        exit 1
     fi
 }
 
 # This variable is used, but shellcheck can't tell.
 # shellcheck disable=SC2034
-help_provision_test='Used in CI to test provision container-agent on an EKS cluster'
-provision-test() {
-    set -x
-
-    echo 'Add the container agent helm chart repo'
-    helm repo add container-agent https://packagecloud.io/circleci/container-agent/helm
-    helm repo update
-
-    echo 'Connect to the "container-agent" Cluster'
-    aws eks update-kubeconfig --name container-agent
-
-    echo 'Dry run the Helm chart'
-    helm upgrade --install --dry-run container-agent container-agent/container-agent \
-        --set "agent.name=dry-run" \
-        --set "agent.image.tag=kubernetes-edge" \
-        --set "agent.nodeSelector.kubernetes\.io/arch=amd64" \
-        --set "agent.rbac.role.name=TestRole" \
-        --set "agent.rbac.role.binding=TestRole" \
-        --set "agent.pullSecrets[0].name=regcred" \
-        --set "agent.image.repository=circleci/runner-agent" \
-        --set "agent.terminationGracePeriodSeconds=60" \
-        --set "agent.nodeSelector.kubernetes\.io/arch=arm64" \
-        --set "rbac.clusterRoleBinding.name=TestClusterRole" \
-        --set "rbac.clusterRole.name=TestClusterRole" \
-        --set "logging.image.repository=circleci/logging-collector" \
-        --set "logging.image.tag=edge"
-}
-
-# This variable is used, but shellcheck can't tell.
-# shellcheck disable=SC2034
-help_package_helm="Package and upload the Helm chart to S3"
-package-helm() {
-    set -x
-
-    publish=${1:?'publish required: true or false'}
-
-    [[ -z ${S3_HELM_BUCKET+z} ]] && echo 'S3_HELM_BUCKET required' && exit 1
-
-    mkdir -p helm-package
-    cd helm-package
-
-    echo 'Package Helm chart and generate index file'
-    helm package ..
-    helm repo --url="https://${S3_HELM_BUCKET}.s3.amazonaws.com/charts/container-agent/" index .
-
-    echo 'Check contents of Helm package and index file'
-    ls .
-    tar -tvf ./container-agent-*.tgz
-    cat ./index.yaml
-
-    if [ "${publish}" == true ]; then
-        aws --profile cci s3 cp ./index.yaml "s3://${S3_HELM_BUCKET}/charts/"
-        aws --profile cci s3 cp ./container-agent-*.tgz "s3://${S3_HELM_BUCKET}/charts/container-agent/"
-        cat ./index.yaml
-    else
-        echo 'Not publishing to S3'
-    fi
-}
-
-# This variable is used, but shellcheck can't tell.
-# shellcheck disable=SC2034
-helm_package_cloud_helm="Package and upload the Helm chart to package cloud"
-package-cloud-helm() {
-    set -x
-
-    publish=${1:?'publish required: true or false'}
-
-    mkdir helm-package
-    cd helm-package
+help_package="Package the Helm chart"
+package() {
+    mkdir -p target
+    cd target
 
     echo 'Package Helm chart'
     helm package ..
@@ -103,25 +35,18 @@ package-cloud-helm() {
     echo 'Check contents of Helm package'
     ls .
     tar -tvf ./container-agent-*.tgz
-
-    if [ "${publish}" == true ]; then
-        package_cloud push circleci/container-agent/helm/v1 ./container-agent-*.tgz
-    else
-        echo 'Not publishing to package cloud'
-    fi
 }
 
 # This variable is used, but shellcheck can't tell.
 # shellcheck disable=SC2034
-help_install_helm="Installs helm for ubuntu in CI/CD"
-install-helm() {
-  set -x
+help_publish="Push the Helm chart to Packagecloud"
+publish() {
+    if ! [ -x "$(command -v package_cloud)" ]; then
+        echo 'The packagecloud CLI is required. See: https://packagecloud.io/l/cli'
+        exit 1
+    fi
 
-  curl https://baltocdn.com/helm/signing.asc | gpg --dearmor | sudo tee /usr/share/keyrings/helm.gpg > /dev/null
-  sudo apt-get install apt-transport-https --yes
-  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
-  sudo apt-get update
-  sudo apt-get install helm
+    package_cloud push circleci/container-agent/helm/v1 ./target/container-agent-*.tgz
 }
 
 # This variable is used, but shellcheck can't tell.

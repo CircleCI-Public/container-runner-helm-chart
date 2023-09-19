@@ -24,6 +24,7 @@
 .vscode/
 
 .circleci/
+catalog-info.yaml
 do
 tests/
-catalog-info.yaml
+target/
