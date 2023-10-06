@@ -74,7 +74,7 @@ generate-readme() {
         go install github.com/norwoodj/helm-docs/cmd/helm-docs@latest
     fi
 
-    helm-docs -t ./templates/README.md.gotmpl "$@"
+    helm-docs -t ./templates/README.md.gotmpl . "$@"
 }
 
 help-text-intro() {

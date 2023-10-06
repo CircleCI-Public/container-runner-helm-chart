@@ -7,6 +7,7 @@ workflows:
   main-workflow:
     jobs:
       - validate
+      - check_readme
       - package
 
       - approve-publish:
@@ -37,6 +38,28 @@ jobs:
       - run: helm lint
       - run: helm template --debug .
       - run: ./do unit-tests
+      - notify_failing_main
+
+  check_readme:
+    docker:
+      - image: jnorwood/helm-docs:latest
+    resource_class: small
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: apk update && apk add git bash
+      - run: ./do generate-readme
+      - run:
+          name: Check if the README is up to date
+          command: |
+            set +eo pipefail
+            git diff --quiet README.md
+            if [ $? -ne 0 ]; then
+              echo "There have been changes to 'values.yaml'. Please run the './do generate-readme' command locally and commit the changes."
+              git diff README.md
+              exit 1
+            fi
       - notify_failing_main
 
   package:
