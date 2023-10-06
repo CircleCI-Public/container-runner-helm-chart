@@ -10,7 +10,7 @@ metadata:
     circleci.com/project-slug: github/CircleCI-Public/container-runner-helm-chart
   links:
     - title: Documentation
-      url: https://github.com/CircleCI-Public/container-runner-helm-chart/blob/main/README.md
+      url: https://github.com/CircleCI-Public/container-runner-helm-chart/blob/main/README.md.gotmpl
       icon: docs
   tags:
     - runner

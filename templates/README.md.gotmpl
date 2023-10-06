@@ -1,0 +1,50 @@
+{{ template "chart.header" . }}
+{{ template "chart.description" . }}
+
+{{ template "chart.versionBadge" . }}{{ template "chart.typeBadge" . }}{{ template "chart.appVersionBadge" . }}
+
+## Contributing
+
+### Prerequisites
+
+{{ template "chart.requirementsSection" . }}
+- Kubernetes 1.12+
+- Helm 3.x
+
+### Installing the Chart
+
+To install the chart with the release name `container-agent`:
+
+- Run `helm repo add container-agent https://packagecloud.io/circleci/container-agent/helm`
+- Run `helm repo update`
+- Run `helm install container-agent container-agent/container-agent -n circleci` to install the chart
+- Update the `values.yaml` file with your resource class token in the `tokens` key under the `agent` key
+
+This will deploy the container runner to the Kubernetes cluster as a release called `container-agent`. You can view the default values by running `helm show values circleci/container-agent` and override these using the `--values` or `--set name=value` flags on the install command below. The [Helm Chart Parameters](#helm-chart-parameters) sections list the parameters that can be configured during installation.
+
+#### Update values.yaml
+
+To run a job with no custom configuration, add the following configuration to the Helm chart `values.yaml`. `MY_TOKEN` is your runner resource class token. Update `namespace/my-rc` with your namespace and runner resource class.
+
+```yaml
+agent:
+  resourceClasses:
+    namespace/my-rc:
+      token: MY_TOKEN
+```
+
+To learn more about setting up Container Runner, [read our docs](https://circleci.com/docs/container-runner/)
+
+### Uninstalling the Chart
+
+To uninstall the `container-agent` deployment:
+
+```console
+$ helm uninstall container-agent
+```
+
+The command removes all the Kubernetes objects associated with the chart and deletes the release
+
+{{ template "chart.valuesSection" . }}
+
+{{ template "helm-docs.versionFooter" . }}

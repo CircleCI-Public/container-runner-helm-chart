@@ -28,3 +28,4 @@ catalog-info.yaml
 do
 tests/
 target/
+*.gotmpl

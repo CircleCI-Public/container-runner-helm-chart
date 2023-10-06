@@ -1,4 +1,8 @@
-# Container Runner Helm Chart
+# container-agent
+
+For deploying a CircleCI Container Agent
+
+![Version: 101.0.9](https://img.shields.io/badge/Version-101.0.9-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 3](https://img.shields.io/badge/AppVersion-3-informational?style=flat-square)
 
 ## Contributing
 
@@ -35,63 +39,54 @@ To learn more about setting up Container Runner, [read our docs](https://circlec
 
 To uninstall the `container-agent` deployment:
 
-```
+```console
 $ helm uninstall container-agent
 ```
 
 The command removes all the Kubernetes objects associated with the chart and deletes the release
 
-### Helm Chart Parameters
+## Values
 
-The following tables list the configurable parameters of the `container-agent` helm chart. For more details about these settings please
-see the comments in the `values.yaml` file
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| agent.affinity | object | `{}` | Agent affinity and anti-affinity Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
+| agent.autodetectPlatform | bool | `true` | Toggle autodetection of OS and CPU architecture to request the appropriate task-agent binary in a heterogeneous cluster. If toggled on, this requires container-agent to have certain cluster-wide permissions for nodes. If toggled off, the cluster is assumed to be homogeneous and the OS and architecture of container-agent are used. |
+| agent.constraintChecker.enable | bool | `false` | Enable constraint checking (This requires at least List Node permissions) |
+| agent.constraintChecker.interval | string | `"15m"` | Check interval |
+| agent.constraintChecker.threshold | int | `3` | Number of failed checks before disabling task claim |
+| agent.containerSecurityContext | object | `{}` | Security Context policies for agent containers |
+| agent.customSecret | string | `""` | Name of the user provided secret containing resource class tokens. You can mix tokens from this secret and in the secret created from tokens specified in the resourceClasses section below Ref: https://circleci.com/docs/container-runner/#custom-secret  The tokens should be specified as secret key-value pairs of the form ResourceClass: Token The resource class name needs to match the names configured below exactly to match tokens to the correct configuration As Kubernetes does not allow / in secret keys, a period (.) should be substituted instead |
+| agent.forceUpdate | bool | `false` | Force a rolling update of the agent deployment |
+| agent.image | object | `{"digest":"","pullPolicy":"Always","registry":"","repository":"circleci/runner-agent","tag":"kubernetes-3"}` | Agent image settings. NOTE: Setting an image digest will take precedence over the image tag |
+| agent.kubeGCEnabled | bool | `true` | Enable garbage collection of dangling Kubernetes objects managed by container agent |
+| agent.kubeGCThreshold | string | `"5h5m"` | The age of a Kubernetes object managed by container agent before the garbage collection deletes it |
+| agent.livenessProbe | object | `{"failureThreshold":5,"httpGet":{"path":"/live","port":7623,"scheme":"HTTP"},"initialDelaySeconds":10,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":1}` | Liveness and readiness probe values Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes |
+| agent.matchLabels.app | string | `"container-agent"` |  |
+| agent.maxConcurrentTasks | int | `20` | Maximum number of tasks that can be run concurrently. IMPORTANT: This concurrency is independent of, and may be limited by, the Runner concurrency of your plan. Configure this value at your own risk based on the resources allocated to your cluster. |
+| agent.maxRunTime | string | `"5h"` |  |
+| agent.name | string | `""` | A (preferably) unique name assigned to this particular container-agent instance. This name will appear in your runners inventory page in the CircleCI UI. If left unspecified, the name will default to the name of the deployment. |
+| agent.nodeSelector | object | `{}` | Node labels for agent pod assignment Ref: https://kubernetes.io/docs/user-guide/node-selection/ |
+| agent.pdb | object | `{"create":false,"maxUnavailable":1,"minAvailable":1}` | Pod disruption budget settings |
+| agent.podAnnotations | object | `{}` | Annotations to be added to agent pods |
+| agent.podSecurityContext | object | `{}` | Security Context policies for agent pods |
+| agent.pullSecrets | list | `[]` |  |
+| agent.readinessProbe.failureThreshold | int | `3` |  |
+| agent.readinessProbe.httpGet.path | string | `"/ready"` |  |
+| agent.readinessProbe.httpGet.port | int | `7623` |  |
+| agent.readinessProbe.httpGet.scheme | string | `"HTTP"` |  |
+| agent.readinessProbe.initialDelaySeconds | int | `10` |  |
+| agent.readinessProbe.periodSeconds | int | `10` |  |
+| agent.readinessProbe.successThreshold | int | `1` |  |
+| agent.readinessProbe.timeoutSeconds | int | `1` |  |
+| agent.replicaCount | int | `1` |  |
+| agent.resourceClasses | object | `{}` | Resource class settings. The tokens specified here will be used to claim tasks & the tasks will be launched with the configured configs Ref: https://circleci.com/docs/container-runner/#resource-class-configuration-custom-pod |
+| agent.resources | object | `{}` | Agent pod resource configuration Ref: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/ |
+| agent.runnerAPI | string | `"https://runner.circleci.com"` | CircleCI Runner API URL |
+| agent.terminationGracePeriodSeconds | int | `18300` | Tasks are drained during the termination grace period, so this should be sufficiently long relative to the maximum run time to ensure graceful shutdown |
+| agent.tolerations | list | `[]` | Node tolerations for agent scheduling to nodes with taints Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/ |
+| logging | object | `{"image":{"registry":"","repository":"circleci/logging-collector","tag":3},"rbac":{"create":true,"role":{"name":"logging-collector","rules":[]}},"serviceAccount":{"annotations":{},"create":true,"name":"logging-collector","secret":{"name":"logging-collector-token"}}}` | Configuration values for the logging containers. These containers run alongside service containers and stream their logs to the CircleCI UI |
+| logging.serviceAccount | object | `{"annotations":{},"create":true,"name":"logging-collector","secret":{"name":"logging-collector-token"}}` | A service account with minimal permissions to collect the service container logs |
+| logging.serviceAccount.secret | object | `{"name":"logging-collector-token"}` | The secret containing the service account token |
+| rbac | object | `{"clusterRole":{"name":"","namespace":"","rules":[]},"create":true,"role":{"name":"","namespace":"","rules":[]}}` | Kubernetes Roles Based Access Control settings |
+| serviceAccount | object | `{"annotations":{},"automountServiceAccountToken":true,"create":true,"name":""}` | Kubernetes service account settings |
 
-#### CircleCI Settings
-
-| Parameter                           | Description                                                | Default                       |
-|-------------------------------------|------------------------------------------------------------|-------------------------------|
-| agent.runnerAPI                     | Runner API URL                                             | `https://runner.circleci.com` |
-| agent.name                          | The name of this runner agent                              | `""`                          |
-| agent.terminationGracePeriodSeconds | Termination grace period during shutdown                   | `18300`                       |
-| agent.maxRunTime                    | Max task run time. Should be shorter than the grace period | `5h`                          |
-| agent.maxConcurrentTasks            | Maximum number of tasks claimed/run concurrently           | `20`                          |
-| agent.kubeGCEnabled                 | Option to enabled/disable garbage collection               | `true`                        |
-| agent.kubeGCThreshold               | Length of time pods can run before deleted by GC           | `5h5m`                        |
-| agent.autodetectPatform             | Enable the platform autodetection feature                  | `true`                        |
-| agent.customSecret                  | Name of the optional custom token secret                   | `""`                          |
-| agent.resourceClasses               | The set of resource classes the agent will claim           | `{}`                          |
-| agent.constraintChecker.enable      | Enable the node constraint checker                         | `false`                       |
-| agent.constraintChecker.threshold   | # failed constraint checks before claiming is disabled     | `3`                           |
-| agent.constraintChecker.interval    | Constraint check interval                                  | `15m`                         |     
-
-#### Kubernetes Object Settings
-
-| Parameter                                   | Description                                                 | Default                      |
-|---------------------------------------------|-------------------------------------------------------------|------------------------------|
-| nameOverride                                | Override the chart name                                     | `""`                         |
-| fullnameOverride                            | Override the full generated name                            | `""`                         |
-| agent.replicaCount                          | Number of container agents to deploy                        | `1`                          |
-| agent.image.registry                        | Agent image registry                                        | `""`                         |
-| agent.image.repository                      | Agent image repository                                      | `circleci/runner-agent`      |
-| agent.pullPolicy                            | Agent image pull policy                                     | `IfNotPresent`               |
-| agent.tag                                   | Agent image tag                                             | `kubernetes-3`               |
-| logging.image.registry                      | Logging agent image registry                                | `""`                         |
-| logging.image.repository                    | Logging agent image repository                              | `circleci/logging-collector` |
-| logging.pullPolicy                          | Logging agent image pull policy                             | `IfNotPresent`               |
-| logging.tag                                 | Logging agent image tag                                     | `latest`                     |
-| agent.pullSecrets                           | Secret objects container private registry credentials       | `[]`                         |
-| agent.matchLabels                           | Match labels used on agent pods                             | `app: container-agent`       |
-| agent.podAnnotations                        | Extra annotations addded to agent pods                      | `{}`                         |
-| agent.podSecurityContext                    | Security context policies added to agent pods               | `{}`                         |
-| agent.containerSecurityContext              | Security context policies add to agent containers           | `{}`                         |
-| agent.resources                             | Custom resource specifications for agent pods               | `{}`                         |
-| agent.nodeSelector                          | Node selector for agent pods                                | `{}`                         |
-| agent.tolerations                           | Node tolerations for agent pods                             | `[]`                         |
-| agent.affinity                              | Node affinity for agent pods                                | `{}`                         |
-| agent.pdb.create                            | Create a PodDisruptionBudget for the agent                  | `false`                      |
-| agent.pdb.minAvailable                      | Minimum available pods in the PodDisruptionBudget           | `1`                          |
-| agent.pdb.maxUnavailble                     | Maximum unavailable pods in the PodDisruptionBudget         | `1`                          |
-| serviceAcccount.create                      | Create a custom service account for the agent               | `true`                       |
-| logging.serviceAccount.create               | Create a custom service account for the logging agent       | `true`                       |
-| rbac.create                                 | Create a role & rolebinding for the service account         | `true`                       |
-| logging.rbac.create                         | Create a role & rolebinding for the logging service account | `true`                       |
