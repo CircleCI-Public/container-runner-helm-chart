@@ -4,19 +4,14 @@
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-  name: circle-storage
-  description: This is the helm chart repository for deploying container runner to kubernetes environments
+  name: circle-runner-helm-chart
+  description: This is the Helm chart repository for deploying container runner to Kubernetes environments
   annotations:
     circleci.com/project-slug: github/CircleCI-Public/container-runner-helm-chart
-    jira/project-key: ONPREM
-    pagerduty.com/service-id: PM7SMHG
   links:
     - title: Documentation
       url: https://github.com/CircleCI-Public/container-runner-helm-chart/blob/main/README.md
       icon: docs
-          - title: Slack
-      url: 'slack://channel?team=T02519B3Z&id=CKCV4LZ8V'
-      icon: chat
   tags:
     - runner
     - helm

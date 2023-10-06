@@ -72,9 +72,9 @@ see the comments in the `values.yaml` file
 | fullnameOverride                            | Override the full generated name                            | `""`                         |
 | agent.replicaCount                          | Number of container agents to deploy                        | `1`                          |
 | agent.image.registry                        | Agent image registry                                        | `""`                         |
-| agent.image.repository                      | Agent image repository                                      | `circleci/container-agent`   |
+| agent.image.repository                      | Agent image repository                                      | `circleci/runner-agent`      |
 | agent.pullPolicy                            | Agent image pull policy                                     | `IfNotPresent`               |
-| agent.tag                                   | Agent image tag                                             | `latest`                     |
+| agent.tag                                   | Agent image tag                                             | `kubernetes-3`               |
 | logging.image.registry                      | Logging agent image registry                                | `""`                         |
 | logging.image.repository                    | Logging agent image repository                              | `circleci/logging-collector` |
 | logging.pullPolicy                          | Logging agent image pull policy                             | `IfNotPresent`               |
