@@ -16,7 +16,7 @@ AC:
 
 :question: **Tests**
 
-<!-- Enumerate what you tested here. We 💖 screenshots and issue specific tests! See https://github.com/circleci/server/blob/main/CONTRIBUTING.md#validating-your-work for more information. -->
+<!-- Enumerate what you tested here. We 💖 screenshots and issue specific tests! -->
 
 - [ ] Tests for new feature and update for changes
 - [ ] Linting passes and/or formatting matches the standard of the repo
