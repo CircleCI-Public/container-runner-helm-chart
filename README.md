@@ -89,4 +89,3 @@ The command removes all the Kubernetes objects associated with the chart and del
 | logging.serviceAccount.secret | object | `{"name":"logging-collector-token"}` | The secret containing the service account token |
 | rbac | object | `{"clusterRole":{"name":"","namespace":"","rules":[]},"create":true,"role":{"name":"","namespace":"","rules":[]}}` | Kubernetes Roles Based Access Control settings |
 | serviceAccount | object | `{"annotations":{},"automountServiceAccountToken":true,"create":true,"name":""}` | Kubernetes service account settings |
-
