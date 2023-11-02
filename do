@@ -68,7 +68,7 @@ unit-tests() {
 
 # This variable is used, but shellcheck can't tell.
 # shellcheck disable=SC2034
-help_docs="Generate docs for the Helm chart"
+help_generate_readme="Generate docs for the Helm chart"
 generate-readme() {
     if ! [ -x "$(command -v helm-docs)" ]; then
         go install github.com/norwoodj/helm-docs/cmd/helm-docs@latest
