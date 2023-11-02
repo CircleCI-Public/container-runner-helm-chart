@@ -5,8 +5,8 @@
 {{- $namespace := .Release.Namespace | quote }}
 {{- $name := printf "%s-ssh" (include "container-agent.fullname" .) }}
 
+apiVersion: gateway.networking.k8s.io/v1
 kind: GatewayClass
-apiVersion: gateway.networking.k8s.io/v1beta1
 metadata:
   name: {{ $name }}
   namespace: {{ $namespace }}
@@ -20,7 +20,7 @@ spec:
   {{- end }}
 
 ---
-apiVersion: gateway.networking.k8s.io/v1beta1
+apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
   name: {{ $name }}

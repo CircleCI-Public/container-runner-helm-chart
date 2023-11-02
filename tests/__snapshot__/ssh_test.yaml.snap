@@ -1,6 +1,6 @@
 should create Gateway and Service resources if enabled:
   1: |
-    apiVersion: gateway.networking.k8s.io/v1beta1
+    apiVersion: gateway.networking.k8s.io/v1
     kind: GatewayClass
     metadata:
       name: RELEASE-NAME-container-agent-ssh
@@ -8,7 +8,7 @@ should create Gateway and Service resources if enabled:
     spec:
       controllerName: example.net/gateway-controller
   2: |
-    apiVersion: gateway.networking.k8s.io/v1beta1
+    apiVersion: gateway.networking.k8s.io/v1
     kind: Gateway
     metadata:
       name: RELEASE-NAME-container-agent-ssh
