@@ -51,15 +51,15 @@ jobs:
           command: apk update && apk add git bash
       - run: ./do generate-readme
       - run:
-          name: Check if the README is up to date
+          name: Check if the README is up to date with any values file changes
+          shell: /usr/bin/env bash -euo pipefail
           command: |
-            set +eo pipefail
-            git diff --quiet README.md
-            if [ $? -ne 0 ]; then
-              echo "There have been changes to 'values.yaml'. Please run the './do generate-readme' command locally and commit the changes."
-              git diff README.md
-              exit 1
+            if [[ `git status --porcelain` ]]; then
+                echo "There have been changes to 'values.yaml'. Please run the './do generate-readme' command locally and commit the changes."
+                git status
+                exit 1
             fi
+            echo 'Everything is up to date'
       - notify_failing_main
 
   package:
