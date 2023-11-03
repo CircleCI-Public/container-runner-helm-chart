@@ -92,3 +92,34 @@ true
 {{- include "container-agent.fullname" . -}}
 {{- end }}
 {{- end }}
+
+{{/* 
+proxy.env defines http proxy environment variables. It expects a list 
+with .Values.proxy first and additional no_proxy hosts as the         
+remainder of arguments 
+*/}}
+{{- define "proxy.env" }}
+{{- $proxySettings := index . 0 }}
+{{- $httpProxyUsername := index . 1 }}
+{{- $httpProxyPassword := index . 2 }}
+{{- $httpsProxyUsername := index . 3 }}
+{{- $httpsProxyPassword := index . 4 }}
+{{- $additionalNoProxyList :=  slice . 5 }}
+- name: HTTP_PROXY
+  {{- with $proxySettings.http }}
+  value: http://{{ if .auth.enabled }}{{ $httpProxyUsername }}:{{ $httpProxyPassword }}@{{ end }}{{ .host }}:{{ .port }}
+- name: http_proxy
+  value: http://{{ if .auth.enabled }}{{ $httpProxyUsername }}:{{ $httpProxyPassword }}@{{ end }}{{ .host }}:{{ .port }}
+  {{- end }}
+- name: HTTPS_PROXY
+  {{- with $proxySettings.https }}
+  value: http://{{ if .auth.enabled }}{{ $httpsProxyUsername }}:{{ $httpsProxyPassword }}@{{ end }}{{ .host }}:{{ .port }}
+- name: https_proxy
+  value: http://{{ if .auth.enabled }}{{ $httpsProxyUsername }}:{{ $httpsProxyPassword }}@{{ end }}{{ .host }}:{{ .port }}
+  {{- end }}
+- name: NO_PROXY
+  {{- $noProxy := concat $proxySettings.no_proxy $additionalNoProxyList }}
+  value: {{ join "," $noProxy | quote }}
+- name: no_proxy
+  value: {{ join "," $noProxy | quote }}
+{{- end }}
