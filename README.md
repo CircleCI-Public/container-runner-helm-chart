@@ -87,5 +87,10 @@ The command removes all the Kubernetes objects associated with the chart and del
 | logging | object | `{"image":{"registry":"","repository":"circleci/logging-collector","tag":3},"rbac":{"create":true,"role":{"name":"logging-collector","rules":[]}},"serviceAccount":{"annotations":{},"create":true,"name":"logging-collector","secret":{"name":"logging-collector-token"}}}` | Configuration values for the logging containers. These containers run alongside service containers and stream their logs to the CircleCI UI |
 | logging.serviceAccount | object | `{"annotations":{},"create":true,"name":"logging-collector","secret":{"name":"logging-collector-token"}}` | A service account with minimal permissions to collect the service container logs |
 | logging.serviceAccount.secret | object | `{"name":"logging-collector-token"}` | The secret containing the service account token |
+| proxy | object | `{"enabled":false,"http":{"auth":{"enabled":false,"password":null,"username":null},"host":"proxy.example.com","port":3128},"https":{"auth":{"enabled":false,"password":null,"username":null},"host":"proxy.example.com","port":3128},"no_proxy":[]}` | Proxy Support for Container Agent |
+| proxy.enabled | bool | `false` | If false, all proxy settings are ignored |
+| proxy.http | object | `{"auth":{"enabled":false,"password":null,"username":null},"host":"proxy.example.com","port":3128}` | Proxy for HTTP requests |
+| proxy.https | object | `{"auth":{"enabled":false,"password":null,"username":null},"host":"proxy.example.com","port":3128}` | Proxy for HTTPS requests |
+| proxy.no_proxy | list | `[]` | List of hostnames, IP CIDR blocks exempt from proxying. Loopback and intra-service traffic is never proxied. |
 | rbac | object | `{"clusterRole":{"name":"","namespace":"","rules":[]},"create":true,"role":{"name":"","namespace":"","rules":[]}}` | Kubernetes Roles Based Access Control settings |
 | serviceAccount | object | `{"annotations":{},"automountServiceAccountToken":true,"create":true,"name":""}` | Kubernetes service account settings |
