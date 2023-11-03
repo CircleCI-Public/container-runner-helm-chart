@@ -2,6 +2,9 @@
 
 This is the Container Agent Helm Chart changelog
 
+# 101.0.10
+- [#29](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/29) Added Proxy env support
+
 # 101.0.8
 
 - [#20](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/20) Use the current major release `3` tag instead of the rolling `edge` tag for the logging-collector image
