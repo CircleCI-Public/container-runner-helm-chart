@@ -244,3 +244,29 @@ logging:
     role:
       name: "logging-collector"
       rules: []
+
+# -- Proxy Support for Container Agent
+proxy:
+  # -- If false, all proxy settings are ignored
+  enabled: false
+
+  # -- Proxy for HTTP requests
+  http:
+    host: proxy.example.com
+    port: 3128
+    auth:
+      enabled: false
+      username: 
+      password: 
+
+  # -- Proxy for HTTPS requests
+  https:
+    host: proxy.example.com
+    port: 3128
+    auth:
+      enabled: false
+      username:
+      password:
+
+  # -- List of hostnames, IP CIDR blocks exempt from proxying. Loopback and intra-service traffic is never proxied.
+  no_proxy: []

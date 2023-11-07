@@ -94,6 +94,33 @@ spec:
               value: {{ .Values.logging.serviceAccount.secret.name | quote }}
             - name: KUBE_AUTODETECT_PLATFORM
               value: {{ .Values.agent.autodetectPlatform | quote }}
+            {{- if .Values.proxy.enabled }}
+            - name: PROXY__SECRETS__HTTP__USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: proxy-credentials
+                  key: http-username
+                  optional: true
+            - name: PROXY__SECRETS__HTTP__PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: proxy-credentials
+                  key: http-password
+                  optional: true
+            - name: PROXY__SECRETS__HTTPS__USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: proxy-credentials
+                  key: https-username
+                  optional: true
+            - name: PROXY__SECRETS__HTTPS__PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: proxy-credentials
+                  key: https-password
+                  optional: true
+            {{ include "proxy.env" (list .Values.proxy "$(PROXY__SECRETS__HTTP__USERNAME)" "$(PROXY__SECRETS__HTTP__PASSWORD)" "$(PROXY__SECRETS__HTTPS__USERNAME)" "$(PROXY__SECRETS__HTTPS__PASSWORD)" "svc.cluster.local") | indent 12 }}
+            {{- end }}         
           livenessProbe: {{ toYaml .Values.agent.livenessProbe | nindent 12 }}
           readinessProbe: {{ toYaml .Values.agent.readinessProbe | nindent 12 }}
         {{- if .Values.agent.resources }}

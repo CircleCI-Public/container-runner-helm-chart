@@ -44,3 +44,43 @@ tests:
           content:
             name: KUBE_LOGGING_SECRET
             value: "my-custom-secret"
+
+  - it: should have proxy configured if given
+    set:
+      proxy.enabled: true
+      proxy.http.host: proxy.test.com
+      proxy.http.port: 3128
+      proxy.https.host: proxy.test.com
+      proxy.https.port: 3128
+      proxy.no_proxy: [ "localhost", "abcd.server.com"]
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: HTTP_PROXY
+            value: http://proxy.test.com:3128
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: HTTPS_PROXY
+            value: http://proxy.test.com:3128
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: NO_PROXY
+            value: "localhost,abcd.server.com,svc.cluster.local"   
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: http_proxy
+            value: http://proxy.test.com:3128
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: https_proxy
+            value: http://proxy.test.com:3128
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: no_proxy
+            value: "localhost,abcd.server.com,svc.cluster.local"           
