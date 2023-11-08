@@ -84,7 +84,7 @@ The command removes all the Kubernetes objects associated with the chart and del
 | agent.runnerAPI | string | `"https://runner.circleci.com"` | CircleCI Runner API URL |
 | agent.ssh.controllerName | string | `"gateway.envoyproxy.io/gatewayclass-controller"` | The name of the infrastructure provider for the SSH rerun Gateway (see: https://gateway-api.sigs.k8s.io/implementations/). SSH reruns depend on the TCPRoute resource, so only implementations that support it are compatible at this time. Please consult the documentation for your preferred Gateway implementation for guidance on setting it up in your cluster. The Envoy Gateway has been successfully tested for SSH reruns (see: https://gateway.envoyproxy.io/latest/user/tcp-routing/). |
 | agent.ssh.enabled | bool | `false` | Controls whether to enable SSH reruns (see: https://circleci.com/docs/ssh-access-jobs/). Note that enabling SSH reruns will install additional resources to your cluster. Notably, SSH reruns requires the Kubernetes Gateway API (see: https://gateway-api.sigs.k8s.io/). |
-| agent.ssh.numPorts | int | `10` |  |
+| agent.ssh.numPorts | int | `20` |  |
 | agent.ssh.parametersRef | object | `{}` |  |
 | agent.ssh.startPort | int | `54782` | Specify the port range that is approved for SSH connections. Note that the number of concurrent jobs rerun with SSH is limited by the number of ports in this range. |
 | agent.terminationGracePeriodSeconds | int | `18300` | Tasks are drained during the termination grace period, so this should be sufficiently long relative to the maximum run time to ensure graceful shutdown |

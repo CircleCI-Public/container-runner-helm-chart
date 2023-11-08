@@ -218,7 +218,7 @@ agent:
     # -- Specify the port range that is approved for SSH connections.
     # Note that the number of concurrent jobs rerun with SSH is limited by the number of ports in this range.
     startPort: 54782
-    numPorts: 10
+    numPorts: 20
 
 # -- Kubernetes service account settings
 serviceAccount:
