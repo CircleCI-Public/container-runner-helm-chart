@@ -206,7 +206,7 @@ agent:
     # -- Controls whether to enable SSH reruns (see: https://circleci.com/docs/ssh-access-jobs/).
     # Note that enabling SSH reruns will install additional resources to your cluster. Notably,
     # SSH reruns requires the Kubernetes Gateway API (see: https://gateway-api.sigs.k8s.io/).
-    isEnabled: false
+    enabled: false
 
     # -- The name of the infrastructure provider for the SSH rerun Gateway (see: https://gateway-api.sigs.k8s.io/implementations/).
     # SSH reruns depend on the TCPRoute resource, so only implementations that support it are compatible at this time.

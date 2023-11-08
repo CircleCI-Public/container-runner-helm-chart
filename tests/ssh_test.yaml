@@ -3,7 +3,7 @@ tests:
   - it: should create Gateway and Service resources if enabled
     template: templates/ssh.yaml
     set:
-      agent.ssh.isEnabled: true
+      agent.ssh.enabled: true
       agent.ssh.controllerName: "example.net/gateway-controller"
       agent.ssh.startPort: 22
       agent.ssh.numPorts: 3
@@ -13,7 +13,7 @@ tests:
   - it: should update Role rules to allow get Gateway and Service resources if enabled
     template: templates/role.yaml
     set:
-      agent.ssh.isEnabled: true
+      agent.ssh.enabled: true
     asserts:
       - contains:
           path: rules
@@ -26,7 +26,7 @@ tests:
   - it: should set container-agent ssh configuration if enabled
     template: templates/deployment.yaml
     set:
-      agent.ssh.isEnabled: true
+      agent.ssh.enabled: true
     asserts:
       - contains:
           path: spec.template.spec.containers[0].env
@@ -47,7 +47,7 @@ tests:
   - it: should not create any Gateway or Service resources if disabled
     template: templates/ssh.yaml
     set:
-      agent.ssh.isEnabled: false
+      agent.ssh.enabled: false
     asserts:
       - hasDocuments:
           count: 0
@@ -55,7 +55,7 @@ tests:
   - it: should not update Role rules to allow get Gateway and Service resources if disabled
     template: templates/role.yaml
     set:
-      agent.ssh.isEnabled: false
+      agent.ssh.enabled: false
     asserts:
       - notContains:
           path: rules
@@ -68,7 +68,7 @@ tests:
   - it: should not set container-agent ssh configuration if disabled
     template: templates/deployment.yaml
     set:
-      agent.ssh.isEnabled: false
+      agent.ssh.enabled: false
     asserts:
       - notContains:
           path: spec.template.spec.containers[0].env

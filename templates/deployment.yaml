@@ -95,7 +95,7 @@ spec:
             - name: KUBE_AUTODETECT_PLATFORM
               value: {{ .Values.agent.autodetectPlatform | quote }}
 
-            {{- if .Values.agent.ssh.isEnabled }}
+            {{- if .Values.agent.ssh.enabled }}
             {{- $sshName := printf "%s-ssh" (include "container-agent.fullname" .) }}
             - name: KUBE_SSH_IS_ENABLED
               value: "true"
@@ -103,7 +103,7 @@ spec:
               value: {{ $sshName }}
             - name: KUBE_SSH_SERVICE_NAME
               value: {{ $sshName }}
-            {{- end }}
+            {{- end }} # if .Values.agent.ssh.enabled
 
             {{- if .Values.proxy.enabled }}
             - name: PROXY__SECRETS__HTTP__USERNAME

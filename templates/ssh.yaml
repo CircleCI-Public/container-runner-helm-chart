@@ -1,4 +1,4 @@
-{{- if .Values.agent.ssh.isEnabled }}
+{{- if .Values.agent.ssh.enabled }}
 
 {{- $startPort := .Values.agent.ssh.startPort | int }}
 {{- $ports := untilStep $startPort (add $startPort .Values.agent.ssh.numPorts | int) 1 -}}
@@ -74,4 +74,4 @@ spec:
     targetPort: {{ $portName }}
   {{- end }}
 
-{{- end }} # if .Values.agent.ssh.isEnabled
+{{- end }} # if .Values.agent.ssh.enabled

@@ -20,11 +20,11 @@ rules:
     resources: ["events"]
     verbs: ["watch"]
 
-  {{- if .Values.agent.ssh.isEnabled }}
+  {{- if .Values.agent.ssh.enabled }}
   - apiGroups: ["", "gateway.networking.k8s.io"]
     resources: ["gateways", "services"]
     verbs: ["get"]
-  {{- end }} # if .Values.agent.ssh.isEnabled
+  {{- end }} # if .Values.agent.ssh.enabled
 
 {{- if $role.rules }}
   {{- toYaml $role.rules | indent 2 }}
