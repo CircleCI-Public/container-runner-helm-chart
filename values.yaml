@@ -270,3 +270,13 @@ proxy:
 
   # -- List of hostnames, IP CIDR blocks exempt from proxying. Loopback and intra-service traffic is never proxied.
   no_proxy: []
+
+# -- Persistent Volume Claim
+persistence:
+  enabled: false
+  name: xyz
+  # existingClaim: ""
+  accessMode: ReadWriteOnce
+  size: 200Mi
+  # storageClass: ""
+  annotations: {}
