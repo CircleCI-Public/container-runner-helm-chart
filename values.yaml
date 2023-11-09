@@ -180,6 +180,10 @@ agent:
     #         volumeMounts:
     #           - name: xyz
     #             mountPath: /path/to/mount
+    #     volumes:
+    #       - name: xyz
+    #         persistentVolumeClaim:
+    #           claimName: container-agent
     #     securityContext:
     #       runAsNonRoot: true
     #     imagePullSecrets:
@@ -274,7 +278,6 @@ proxy:
 # -- Persistent Volume Claim
 persistence:
   enabled: false
-  name: xyz
   # existingClaim: ""
   accessMode: ReadWriteOnce
   size: 200Mi
