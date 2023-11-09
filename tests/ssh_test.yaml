@@ -1,0 +1,87 @@
+suite: test ssh
+tests:
+  - it: should create Gateway and Service resources if enabled
+    template: templates/ssh.yaml
+    set:
+      agent.ssh.enabled: true
+      agent.ssh.controllerName: "example.net/gateway-controller"
+      agent.ssh.startPort: 22
+      agent.ssh.numPorts: 3
+    asserts:
+      - matchSnapshot: {}
+
+  - it: should update Role rules to allow get Gateway and Service resources if enabled
+    template: templates/role.yaml
+    set:
+      agent.ssh.enabled: true
+    asserts:
+      - contains:
+          path: rules
+          content:
+            apiGroups: ["", "gateway.networking.k8s.io"]
+            resources: ["gateways", "services"]
+            verbs: ["get"]
+        documentIndex: 0
+
+  - it: should set container-agent ssh configuration if enabled
+    template: templates/deployment.yaml
+    set:
+      agent.ssh.enabled: true
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: KUBE_SSH_IS_ENABLED
+            value: "true"
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: KUBE_SSH_GATEWAY_NAME
+            value: "RELEASE-NAME-container-agent-ssh"
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: KUBE_SSH_SERVICE_NAME
+            value: "RELEASE-NAME-container-agent-ssh"
+
+  - it: should not create any Gateway or Service resources if disabled
+    template: templates/ssh.yaml
+    set:
+      agent.ssh.enabled: false
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: should not update Role rules to allow get Gateway and Service resources if disabled
+    template: templates/role.yaml
+    set:
+      agent.ssh.enabled: false
+    asserts:
+      - notContains:
+          path: rules
+          content:
+            apiGroups: ["", "gateway.networking.k8s.io"]
+            resources: ["gateways", "services"]
+            verbs: ["get"]
+        documentIndex: 0
+
+  - it: should not set container-agent ssh configuration if disabled
+    template: templates/deployment.yaml
+    set:
+      agent.ssh.enabled: false
+    asserts:
+      - notContains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: KUBE_SSH_IS_ENABLED
+            value: "true"
+      - notContains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: KUBE_SSH_GATEWAY_NAME
+            value: "RELEASE-NAME-container-agent-ssh"
+      - notContains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: KUBE_SSH_SERVICE_NAME
+            value: "RELEASE-NAME-container-agent-ssh"

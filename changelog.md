@@ -2,7 +2,12 @@
 
 This is the Container Agent Helm Chart changelog
 
+# 101.0.11
+
+- [#16](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/16) [PRERELEASE] Support SSH reruns
+
 # 101.0.10
+
 - [#29](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/29) Added Proxy env support
 
 # 101.0.8

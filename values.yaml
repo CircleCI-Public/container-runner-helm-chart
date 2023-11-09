@@ -202,6 +202,24 @@ agent:
     # -- Check interval
     interval: 15m
 
+  ssh:
+    # -- Controls whether to enable SSH reruns (see: https://circleci.com/docs/ssh-access-jobs/).
+    # Note that enabling SSH reruns will install additional resources to your cluster. Notably,
+    # SSH reruns requires the Kubernetes Gateway API (see: https://gateway-api.sigs.k8s.io/).
+    enabled: false
+
+    # -- The name of the infrastructure provider for the SSH rerun Gateway (see: https://gateway-api.sigs.k8s.io/implementations/).
+    # SSH reruns depend on the TCPRoute resource, so only implementations that support it are compatible at this time.
+    # Please consult the documentation for your preferred Gateway implementation for guidance on setting it up in your cluster.
+    # The Envoy Gateway has been successfully tested for SSH reruns (see: https://gateway.envoyproxy.io/latest/user/tcp-routing/).
+    controllerName: "gateway.envoyproxy.io/gatewayclass-controller"
+    parametersRef: {}
+
+    # -- Specify the port range that is approved for SSH connections.
+    # Note that the number of concurrent jobs rerun with SSH is limited by the number of ports in this range.
+    startPort: 54782
+    numPorts: 20
+
 # -- Kubernetes service account settings
 serviceAccount:
   create: true
