@@ -2,6 +2,10 @@
 
 This is the Container Agent Helm Chart changelog
 
+# 101.0.12
+
+- [#31](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/31) Fixed PDB to reference the right variable
+
 # 101.0.11
 
 - [#16](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/16) [PRERELEASE] Support SSH reruns
