@@ -8,7 +8,7 @@ spec:
 {{- if .Values.agent.pdb.minAvailable }}
   minAvailable: {{ .Values.agent.pdb.minAvailable }}
 {{- end }}
-{{- if .Values.pdb.maxUnavailable }}
+{{- if .Values.agent.pdb.maxUnavailable }}
   maxUnavailable: {{ .Values.agent.pdb.maxUnavailable }}
 {{- end }}
   selector:
