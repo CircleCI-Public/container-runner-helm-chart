@@ -10,6 +10,8 @@ kind: GatewayClass
 metadata:
   name: {{ $name }}
   namespace: {{ $namespace }}
+  finalizers:
+    - gateway-exists-finalizer.gateway.networking.k8s.io
 spec:
   controllerName: {{ .Values.agent.ssh.controllerName }}
   {{- with .Values.agent.ssh.parametersRef }}
