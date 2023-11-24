@@ -5,6 +5,11 @@ tests:
     set:
       agent.ssh.enabled: true
       agent.ssh.controllerName: "example.net/gateway-controller"
+      agent.ssh.parametersRef:
+        group: "test.group"
+        kind: "testKind"
+        name: "testName"
+        namespace: "testNamespace"
       agent.ssh.startPort: 22
       agent.ssh.numPorts: 3
     asserts:

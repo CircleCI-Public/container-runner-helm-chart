@@ -2,9 +2,13 @@
 
 This is the Container Agent Helm Chart changelog
 
+# 101.0.14
+
+- [#34](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/34) Support the namespace field in ParametersReference for the SSH reruns GatewayClass
+
 # 101.0.13
 
-- [#32](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/32) Add finalizer on GatewayClass to ensure proper cleanup
+- [#33](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/33) Add finalizer on GatewayClass to ensure proper cleanup
 
 # 101.0.12
 
