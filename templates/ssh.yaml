@@ -19,6 +19,9 @@ spec:
     group: {{ .group }}
     kind: {{ .kind }}
     name: {{ .name }}
+    {{- if .namespace }}
+    namespace: {{ .namespace }}
+    {{- end }}
   {{- end }}
 
 ---
