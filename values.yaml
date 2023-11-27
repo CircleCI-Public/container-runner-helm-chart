@@ -213,7 +213,14 @@ agent:
     # Please consult the documentation for your preferred Gateway implementation for guidance on setting it up in your cluster.
     # The Envoy Gateway has been successfully tested for SSH reruns (see: https://gateway.envoyproxy.io/latest/user/tcp-routing/).
     controllerName: "gateway.envoyproxy.io/gatewayclass-controller"
+    # -- Specify controller-specific configuration for the Gateway.
+    # For more information, see: https://gateway-api.sigs.k8s.io/api-types/gatewayclass/#gatewayclass-parameters
     parametersRef: {}
+    # -- Alternatively, you can provide an existing GatewayClass name instead of creating a new one. The GatewayClass resource is a
+    # cluster-scoped resource defined by the infrastructure provider, so you may want to manage this resource externally.
+    # Note: Configuration specific to SSH reruns is defined in the namespace-scoped Gateway resource.
+    # For more information, see: https://gateway-api.sigs.k8s.io/api-types/gatewayclass/#gatewayclass
+    existingGatewayClassName: ""
 
     # -- Specify the port range that is approved for SSH connections.
     # Note that the number of concurrent jobs rerun with SSH is limited by the number of ports in this range.

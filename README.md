@@ -2,7 +2,7 @@
 
 For deploying a CircleCI Container Agent
 
-![Version: 101.0.14](https://img.shields.io/badge/Version-101.0.14-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 3](https://img.shields.io/badge/AppVersion-3-informational?style=flat-square)
+![Version: 101.0.15](https://img.shields.io/badge/Version-101.0.15-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 3](https://img.shields.io/badge/AppVersion-3-informational?style=flat-square)
 
 ## Contributing
 
@@ -84,8 +84,9 @@ The command removes all the Kubernetes objects associated with the chart and del
 | agent.runnerAPI | string | `"https://runner.circleci.com"` | CircleCI Runner API URL |
 | agent.ssh.controllerName | string | `"gateway.envoyproxy.io/gatewayclass-controller"` | The name of the infrastructure provider for the SSH rerun Gateway (see: https://gateway-api.sigs.k8s.io/implementations/). SSH reruns depend on the TCPRoute resource, so only implementations that support it are compatible at this time. Please consult the documentation for your preferred Gateway implementation for guidance on setting it up in your cluster. The Envoy Gateway has been successfully tested for SSH reruns (see: https://gateway.envoyproxy.io/latest/user/tcp-routing/). |
 | agent.ssh.enabled | bool | `false` | Controls whether to enable SSH reruns (see: https://circleci.com/docs/ssh-access-jobs/). Note that enabling SSH reruns will install additional resources to your cluster. Notably, SSH reruns requires the Kubernetes Gateway API (see: https://gateway-api.sigs.k8s.io/). |
+| agent.ssh.existingGatewayClassName | string | `""` | Alternatively, you can provide an existing GatewayClass name instead of creating a new one. The GatewayClass resource is a cluster-scoped resource defined by the infrastructure provider, so you may want to manage this resource externally. Note: Configuration specific to SSH reruns is defined in the namespace-scoped Gateway resource. For more information, see: https://gateway-api.sigs.k8s.io/api-types/gatewayclass/#gatewayclass |
 | agent.ssh.numPorts | int | `20` |  |
-| agent.ssh.parametersRef | object | `{}` |  |
+| agent.ssh.parametersRef | object | `{}` | Specify controller-specific configuration for the Gateway. For more information, see: https://gateway-api.sigs.k8s.io/api-types/gatewayclass/#gatewayclass-parameters |
 | agent.ssh.startPort | int | `54782` | Specify the port range that is approved for SSH connections. Note that the number of concurrent jobs rerun with SSH is limited by the number of ports in this range. |
 | agent.terminationGracePeriodSeconds | int | `18300` | Tasks are drained during the termination grace period, so this should be sufficiently long relative to the maximum run time to ensure graceful shutdown |
 | agent.tolerations | list | `[]` | Node tolerations for agent scheduling to nodes with taints Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/ |

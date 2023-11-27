@@ -90,3 +90,17 @@ tests:
           content:
             name: KUBE_SSH_SERVICE_NAME
             value: "RELEASE-NAME-container-agent-ssh"
+
+  - it: should not create a GatewayClass if an existing GatewayClass name is provided
+    template: templates/ssh.yaml
+    set:
+      agent.ssh.enabled: true
+      agent.ssh.existingGatewayClassName: "gwc"
+    asserts:
+      - notMatchRegex:
+          path: kind
+          pattern: GatewayClass
+      - equal:
+          path: spec.gatewayClassName
+          value: "gwc"
+        documentIndex: 0
