@@ -33,6 +33,11 @@ agent:
   # -- Force a rolling update of the agent deployment
   forceUpdate: false
 
+  # -- A dictionary of key-value pairs to set as environment variables in the container-agent app container.
+  # Note that this does not set environment variables in a task, which can be done via `agent.resourceClasses` or
+  # in CircleCI: https://circleci.com/docs/set-environment-variable.
+  environment: {}
+
   # -- Liveness and readiness probe values
   # Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   livenessProbe:

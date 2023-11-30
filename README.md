@@ -2,7 +2,7 @@
 
 For deploying a CircleCI Container Agent
 
-![Version: 101.0.15](https://img.shields.io/badge/Version-101.0.15-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 3](https://img.shields.io/badge/AppVersion-3-informational?style=flat-square)
+![Version: 101.0.16](https://img.shields.io/badge/Version-101.0.16-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 3](https://img.shields.io/badge/AppVersion-3-informational?style=flat-square)
 
 ## Contributing
 
@@ -56,6 +56,7 @@ The command removes all the Kubernetes objects associated with the chart and del
 | agent.constraintChecker.threshold | int | `3` | Number of failed checks before disabling task claim |
 | agent.containerSecurityContext | object | `{}` | Security Context policies for agent containers |
 | agent.customSecret | string | `""` | Name of the user provided secret containing resource class tokens. You can mix tokens from this secret and in the secret created from tokens specified in the resourceClasses section below Ref: https://circleci.com/docs/container-runner/#custom-secret  The tokens should be specified as secret key-value pairs of the form ResourceClass: Token The resource class name needs to match the names configured below exactly to match tokens to the correct configuration As Kubernetes does not allow / in secret keys, a period (.) should be substituted instead |
+| agent.environment | object | `{}` | A dictionary of key-value pairs to set as environment variables in the container-agent app container. Note that this does not set environment variables in a task, which can be done via `agent.resourceClasses` or in CircleCI: https://circleci.com/docs/set-environment-variable. |
 | agent.forceUpdate | bool | `false` | Force a rolling update of the agent deployment |
 | agent.image | object | `{"digest":"","pullPolicy":"Always","registry":"","repository":"circleci/runner-agent","tag":"kubernetes-3"}` | Agent image settings. NOTE: Setting an image digest will take precedence over the image tag |
 | agent.kubeGCEnabled | bool | `true` | Enable garbage collection of dangling Kubernetes objects managed by container agent |

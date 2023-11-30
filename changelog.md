@@ -2,6 +2,10 @@
 
 This is the Container Agent Helm Chart changelog
 
+# 101.0.16
+
+- [#36](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/36) Add field to set arbitrary environment variables for container-agent
+
 # 101.0.15
 
 - [#34](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/34) [PRERELEASE] Add an option to specify an existing GatewayClass for SSH reruns

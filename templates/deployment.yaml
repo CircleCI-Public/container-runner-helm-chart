@@ -105,6 +105,11 @@ spec:
               value: {{ $sshName }}
             {{- end }} # if .Values.agent.ssh.enabled
 
+            {{- range $key, $value := .Values.agent.environment }}
+            - name: "{{ $key }}"
+              value: "{{ $value }}"
+            {{- end }}
+
             {{- if .Values.proxy.enabled }}
             - name: PROXY__SECRETS__HTTP__USERNAME
               valueFrom:
