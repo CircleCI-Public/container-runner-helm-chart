@@ -45,6 +45,27 @@ tests:
             name: KUBE_LOGGING_SECRET
             value: "my-custom-secret"
 
+  - it: should set environment variables provided in agent.environment
+    template: templates/deployment.yaml
+    set:
+      agent.environment.FOO: BAR
+      agent.environment.BAZ: QUX
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Deployment
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: "FOO"
+            value: "BAR"
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: "BAZ"
+            value: "QUX"
+
   - it: should have proxy configured if given
     set:
       proxy.enabled: true
@@ -83,4 +104,4 @@ tests:
           path: spec.template.spec.containers[0].env
           content:
             name: no_proxy
-            value: "localhost,abcd.server.com,svc.cluster.local"           
+            value: "localhost,abcd.server.com,svc.cluster.local"
