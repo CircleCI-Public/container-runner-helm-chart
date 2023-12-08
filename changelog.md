@@ -2,6 +2,10 @@
 
 This is the Container Agent Helm Chart changelog
 
+# 101.0.17
+
+- [#37](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/37) Update the values file and README for the SSH reruns [open preview](https://circleci.com/docs/container-runner-installation/#enable-rerun-job-with-ssh).
+
 # 101.0.16
 
 - [#36](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/36) Add field to set arbitrary environment variables for container-agent
