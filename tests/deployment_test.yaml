@@ -45,6 +45,43 @@ tests:
             name: KUBE_LOGGING_SECRET
             value: "my-custom-secret"
 
+  - it: should override the default garbage collection settings
+    set:
+      agent.gc.enabled: false
+      agent.gc.threshold: "1h"
+      agent.gc.interval: "10m"
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: KUBE_GC_ENABLED
+            value: "false"
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: KUBE_GC_THRESHOLD
+            value: "1h"
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: KUBE_GC_INTERVAL
+            value: "10m"
+  - it: should support older garbage collection settings
+    set:
+      agent.kubeGCEnabled: false
+      agent.kubeGCThreshold: "1h"
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: KUBE_GC_ENABLED
+            value: "false"
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: KUBE_GC_THRESHOLD
+            value: "1h"
+
   - it: should set environment variables provided in agent.environment
     template: templates/deployment.yaml
     set:

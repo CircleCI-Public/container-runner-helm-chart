@@ -2,7 +2,7 @@
 
 For deploying a CircleCI Container Agent
 
-![Version: 101.0.17](https://img.shields.io/badge/Version-101.0.17-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 3](https://img.shields.io/badge/AppVersion-3-informational?style=flat-square)
+![Version: 101.0.18](https://img.shields.io/badge/Version-101.0.18-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 3](https://img.shields.io/badge/AppVersion-3-informational?style=flat-square)
 
 ## Contributing
 
@@ -56,11 +56,12 @@ The command removes all the Kubernetes objects associated with the chart and del
 | agent.constraintChecker.threshold | int | `3` | Number of failed checks before disabling task claim |
 | agent.containerSecurityContext | object | `{}` | Security Context policies for agent containers |
 | agent.customSecret | string | `""` | Name of the user provided secret containing resource class tokens. You can mix tokens from this secret and in the secret created from tokens specified in the resourceClasses section below Ref: https://circleci.com/docs/container-runner/#custom-secret  The tokens should be specified as secret key-value pairs of the form ResourceClass: Token The resource class name needs to match the names configured below exactly to match tokens to the correct configuration As Kubernetes does not allow / in secret keys, a period (.) should be substituted instead |
-| agent.environment | object | `{}` | A dictionary of key-value pairs to set as environment variables in the container-agent app container. Note that this does not set environment variables in a task, which can be done via `agent.resourceClasses` or in CircleCI: https://circleci.com/docs/set-environment-variable. |
+| agent.environment | object | `{}` | A dictionary of key-value pairs to set as environment variables in the container-agent app container. Note that this does not set environment variables in a task, which can be done via `agent.resourceClasses` or [in CircleCI](https://circleci.com/docs/set-environment-variable). |
 | agent.forceUpdate | bool | `false` | Force a rolling update of the agent deployment |
+| agent.gc.enabled | bool | `true` | Enable garbage collection (GC) of Kubernetes objects such as Pods or Secrets left over from CircleCI tasks. Dangling objects may occur if container runner is forcefully deleted, causing the task state-tracking to be lost. GC will only remove objects labelled with `app.kubernetes.io/managed-by=circleci-container-agent`. |
+| agent.gc.interval | string | `"3m"` | Frequency of GC runs. Adjust this to balance minimal lingering K8s resources vs. system load. Infrequent runs may reduce the load but could result in excess K8s resources, while frequent runs help minimize resources but could increase system load. |
+| agent.gc.threshold | string | `"5h5m"` | The age of a Kubernetes object managed by container agent before GC deletes it. This value should be slightly longer than the `agent.maxRunTime` to prevent premature removal. GC may remove some objects sooner than this threshold, such as task Pod containers that fail their liveness probe. |
 | agent.image | object | `{"digest":"","pullPolicy":"Always","registry":"","repository":"circleci/runner-agent","tag":"kubernetes-3"}` | Agent image settings. NOTE: Setting an image digest will take precedence over the image tag |
-| agent.kubeGCEnabled | bool | `true` | Enable garbage collection of dangling Kubernetes objects managed by container agent |
-| agent.kubeGCThreshold | string | `"5h5m"` | The age of a Kubernetes object managed by container agent before the garbage collection deletes it |
 | agent.livenessProbe | object | `{"failureThreshold":5,"httpGet":{"path":"/live","port":7623,"scheme":"HTTP"},"initialDelaySeconds":10,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":1}` | Liveness and readiness probe values Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes |
 | agent.matchLabels.app | string | `"container-agent"` |  |
 | agent.maxConcurrentTasks | int | `20` | Maximum number of tasks that can be run concurrently. IMPORTANT: This concurrency is independent of, and may be limited by, the Runner concurrency of your plan. Configure this value at your own risk based on the resources allocated to your cluster. |
