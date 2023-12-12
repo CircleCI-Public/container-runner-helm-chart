@@ -35,7 +35,7 @@ agent:
 
   # -- A dictionary of key-value pairs to set as environment variables in the container-agent app container.
   # Note that this does not set environment variables in a task, which can be done via `agent.resourceClasses` or
-  # in CircleCI: https://circleci.com/docs/set-environment-variable.
+  # [in CircleCI](https://circleci.com/docs/set-environment-variable).
   environment: {}
 
   # -- Liveness and readiness probe values
@@ -148,10 +148,21 @@ agent:
   # Configure this value at your own risk based on the resources allocated to your cluster.
   maxConcurrentTasks: 20
 
-  # -- Enable garbage collection of dangling Kubernetes objects managed by container agent
-  kubeGCEnabled: true
-  # -- The age of a Kubernetes object managed by container agent before the garbage collection deletes it
-  kubeGCThreshold: "5h5m"
+  gc:
+    # -- Enable garbage collection (GC) of Kubernetes objects such as Pods or Secrets left over from CircleCI tasks.
+    # Dangling objects may occur if container runner is forcefully deleted, causing the task state-tracking to be lost.
+    # GC will only remove objects labelled with `app.kubernetes.io/managed-by=circleci-container-agent`.
+    enabled: true
+
+    # -- The age of a Kubernetes object managed by container agent before GC deletes it.
+    # This value should be slightly longer than the `agent.maxRunTime` to prevent premature removal.
+    # GC may remove some objects sooner than this threshold, such as task Pod containers that fail their liveness probe.
+    threshold: "5h5m"
+
+    # -- Frequency of GC runs. Adjust this to balance minimal lingering K8s resources vs. system load.
+    # Infrequent runs may reduce the load but could result in excess K8s resources, while frequent runs help minimize
+    # resources but could increase system load.
+    interval: "3m"
 
   # -- Toggle autodetection of OS and CPU architecture to request the appropriate task-agent binary in a heterogeneous cluster.
   # If toggled on, this requires container-agent to have certain cluster-wide permissions for nodes.

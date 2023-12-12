@@ -2,6 +2,10 @@
 
 This is the Container Agent Helm Chart changelog
 
+# 101.0.18
+
+- [#38](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/38) Add option to set the garbage collection (GC) period to tune how quickly failed Pods are removed.
+
 # 101.0.17
 
 - [#37](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/37) Update the values file and README for the SSH reruns [open preview](https://circleci.com/docs/container-runner-installation/#enable-rerun-job-with-ssh).

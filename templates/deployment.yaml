@@ -73,10 +73,6 @@ spec:
               value: {{ .Values.agent.constraintChecker.interval | quote }}
             - name: KUBE_NAMESPACE
               value: {{ .Release.Namespace | quote }}
-            - name: KUBE_GC_ENABLED
-              value: {{ .Values.agent.kubeGCEnabled | quote }}
-            - name: KUBE_GC_THRESHOLD
-              value: {{ .Values.agent.kubeGCThreshold }}
             - name: KUBE_TASK_POD_CONFIG
               value: /etc/container-agent/taskpods
             - name: KUBE_TOKEN_SECRETS
@@ -95,6 +91,16 @@ spec:
             - name: KUBE_AUTODETECT_PLATFORM
               value: {{ .Values.agent.autodetectPlatform | quote }}
 
+            {{- with .Values.agent }}
+            # GC configuration settings
+            - name: KUBE_GC_ENABLED
+              value: {{- if ne .kubeGCEnabled nil }} {{ .kubeGCEnabled | quote }} {{- else }} {{ .gc.enabled | quote }} {{- end }}
+            - name: KUBE_GC_THRESHOLD
+              value: {{- if .kubeGCThreshold }} {{ .kubeGCThreshold | quote }} {{- else }} {{ .gc.threshold | quote }} {{- end }}
+            - name: KUBE_GC_INTERVAL
+              value: {{ .gc.interval | quote }}
+            {{- end }}
+
             {{- if .Values.agent.ssh.enabled }}
             {{- $sshName := printf "%s-ssh" (include "container-agent.fullname" .) }}
             - name: KUBE_SSH_IS_ENABLED
@@ -104,11 +110,6 @@ spec:
             - name: KUBE_SSH_SERVICE_NAME
               value: {{ $sshName }}
             {{- end }} # if .Values.agent.ssh.enabled
-
-            {{- range $key, $value := .Values.agent.environment }}
-            - name: "{{ $key }}"
-              value: "{{ $value }}"
-            {{- end }}
 
             {{- if .Values.proxy.enabled }}
             - name: PROXY__SECRETS__HTTP__USERNAME
@@ -136,7 +137,13 @@ spec:
                   key: https-password
                   optional: true
             {{ include "proxy.env" (list .Values.proxy "$(PROXY__SECRETS__HTTP__USERNAME)" "$(PROXY__SECRETS__HTTP__PASSWORD)" "$(PROXY__SECRETS__HTTPS__USERNAME)" "$(PROXY__SECRETS__HTTPS__PASSWORD)" "svc.cluster.local") | indent 12 }}
-            {{- end }}         
+            {{- end }}
+
+            {{- range $key, $value := .Values.agent.environment }}
+            - name: "{{ $key }}"
+              value: "{{ $value }}"
+            {{- end }}
+
           livenessProbe: {{ toYaml .Values.agent.livenessProbe | nindent 12 }}
           readinessProbe: {{ toYaml .Values.agent.readinessProbe | nindent 12 }}
         {{- if .Values.agent.resources }}
