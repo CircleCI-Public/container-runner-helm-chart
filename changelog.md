@@ -2,6 +2,10 @@
 
 This is the Container Agent Helm Chart changelog
 
+# 101.0.19
+
+- [#39](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/39) fix clusterrole indentation when adding rules #39
+
 # 101.0.18
 
 - [#38](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/38) Add option to set the garbage collection (GC) period to tune how quickly failed Pods are removed.
