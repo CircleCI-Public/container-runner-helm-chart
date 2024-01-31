@@ -16,7 +16,7 @@ rules:
     resources: ["nodes"]
     verbs: ["get", "list"]
 {{- if $clusterRole.rules }}
-  {{- toYaml $clusterRole.rules | indent 2 }}
+  {{- toYaml $clusterRole.rules | nindent 2 }}
 {{- end }} # if $clusterRole.rules
 ---
 apiVersion: rbac.authorization.k8s.io/v1
