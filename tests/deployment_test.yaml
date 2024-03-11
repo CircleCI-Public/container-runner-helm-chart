@@ -103,6 +103,31 @@ tests:
             name: "BAZ"
             value: "QUX"
 
+  - it: should override the default log settings
+    set:
+      agent.log.level: "debug"
+      agent.log.format: "text"
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: O11Y_LEVEL
+            value: "debug"
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: O11Y_FORMAT
+            value: "text"
+  - it: should support older log level setting
+    set:
+      agent.loggingLevel: "error"
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: O11Y_LEVEL
+            value: "error"
+
   - it: should have proxy configured if given
     set:
       proxy.enabled: true

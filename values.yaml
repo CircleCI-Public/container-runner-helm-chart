@@ -38,6 +38,17 @@ agent:
   # [in CircleCI](https://circleci.com/docs/set-environment-variable).
   environment: {}
 
+  log:
+    # -- Set the logging level for the container-agent app. Possible values are `debug`, `info`,
+    # `warn`, and `error`. Note: this setting isn't to be confused with the
+    # [logging sidecar container](https://circleci.com/docs/container-runner/#logging-containers) which is configured
+    # under the top-level `logging` key.
+    level: "info"
+
+    # -- Set the logging format for the container-agent app. Possible values are `text`, `color`,
+    # `json`, and `none`.
+    format: "json"
+
   # -- Liveness and readiness probe values
   # Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   livenessProbe:

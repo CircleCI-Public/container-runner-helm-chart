@@ -2,6 +2,10 @@
 
 This is the Container Agent Helm Chart changelog
 
+# 101.0.20
+
+- [#41](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/41) Expose log settings for container-agent in the values file.
+
 # 101.0.19
 
 - [#39](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/39) fix clusterrole indentation when adding rules #39

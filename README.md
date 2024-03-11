@@ -2,7 +2,7 @@
 
 For deploying a CircleCI Container Agent
 
-![Version: 101.0.19](https://img.shields.io/badge/Version-101.0.19-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 3](https://img.shields.io/badge/AppVersion-3-informational?style=flat-square)
+![Version: 101.0.20](https://img.shields.io/badge/Version-101.0.20-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 3](https://img.shields.io/badge/AppVersion-3-informational?style=flat-square)
 
 ## Contributing
 
@@ -63,6 +63,8 @@ The command removes all the Kubernetes objects associated with the chart and del
 | agent.gc.threshold | string | `"5h5m"` | The age of a Kubernetes object managed by container agent before GC deletes it. This value should be slightly longer than the `agent.maxRunTime` to prevent premature removal. GC may remove some objects sooner than this threshold, such as task Pod containers that fail their liveness probe. |
 | agent.image | object | `{"digest":"","pullPolicy":"Always","registry":"","repository":"circleci/runner-agent","tag":"kubernetes-3"}` | Agent image settings. NOTE: Setting an image digest will take precedence over the image tag |
 | agent.livenessProbe | object | `{"failureThreshold":5,"httpGet":{"path":"/live","port":7623,"scheme":"HTTP"},"initialDelaySeconds":10,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":1}` | Liveness and readiness probe values Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes |
+| agent.log.format | string | `"json"` | Set the logging format for the container-agent app. Possible values are `text`, `color`, `json`, and `none`. |
+| agent.log.level | string | `"info"` | Set the logging level for the container-agent app. Possible values are `debug`, `info`, `warn`, and `error`. Note: this setting isn't to be confused with the [logging sidecar container](https://circleci.com/docs/container-runner/#logging-containers) which is configured under the top-level `logging` key. |
 | agent.matchLabels.app | string | `"container-agent"` |  |
 | agent.maxConcurrentTasks | int | `20` | Maximum number of tasks that can be run concurrently. IMPORTANT: This concurrency is independent of, and may be limited by, the Runner concurrency of your plan. Configure this value at your own risk based on the resources allocated to your cluster. |
 | agent.maxRunTime | string | `"5h"` |  |
