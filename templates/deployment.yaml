@@ -59,8 +59,6 @@ spec:
               value: {{ .Values.agent.runnerAPI }}
             - name: AGENT_NAME
               value: {{ .Values.agent.name | default (include "container-agent.fullname" .) }}
-            - name: O11Y_LEVEL
-              value: {{ .Values.agent.loggingLevel | quote }}
             - name: MAX_RUN_TIME
               value: {{ .Values.agent.maxRunTime }}
             - name: MAX_CONCURRENT_TASKS
@@ -90,8 +88,13 @@ spec:
               value: {{ .Values.logging.serviceAccount.secret.name | quote }}
             - name: KUBE_AUTODETECT_PLATFORM
               value: {{ .Values.agent.autodetectPlatform | quote }}
-
             {{- with .Values.agent }}
+            # Agent logging settings
+            - name: O11Y_LEVEL
+              value: {{- if ne .loggingLevel nil }} {{ .loggingLevel | quote }} {{- else }} {{ .log.level | quote }} {{- end }}
+            - name: O11Y_FORMAT
+              value: {{ .log.format | quote }}
+
             # GC configuration settings
             - name: KUBE_GC_ENABLED
               value: {{- if ne .kubeGCEnabled nil }} {{ .kubeGCEnabled | quote }} {{- else }} {{ .gc.enabled | quote }} {{- end }}
