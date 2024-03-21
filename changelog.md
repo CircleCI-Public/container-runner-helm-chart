@@ -1,6 +1,8 @@
 # Container Agent Helm Chart Changelog
 
 This is the Container Agent Helm Chart changelog
+# 101.0.21
+- [#42](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/42) Fix formatting bug when adding role and logging role rules
 
 # 101.0.20
 
