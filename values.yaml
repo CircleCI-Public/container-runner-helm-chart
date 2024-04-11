@@ -25,7 +25,8 @@ agent:
   podAnnotations: {}
 
   # -- Security Context policies for agent pods
-  podSecurityContext: {}
+  podSecurityContext:
+    fsGroup: 1500
 
   # -- Security Context policies for agent containers
   containerSecurityContext: {}

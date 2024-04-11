@@ -24,7 +24,7 @@ spec:
     {{- if .Values.agent.pullSecrets }}
       imagePullSecrets:
       {{- range .Values.agent.pullSecrets }}
-        - {{ toYaml . }}
+        - name: {{ toYaml . }}
       {{- end}}
     {{- end }}
       serviceAccountName: {{ include "container-agent.serviceAccountName" . }}
@@ -38,6 +38,9 @@ spec:
         - name: taskpod-config
           configMap:
             name: {{ include "container-agent.fullname" . }}
+        - name: shared-task-agent
+          persistentVolumeClaim:
+            claimName: {{ include "container-agent.fullname" . }}
       containers:
         - name: {{ .Chart.Name }}
           {{- with .Values.agent.image }}
@@ -54,6 +57,8 @@ spec:
           volumeMounts:
             - name: taskpod-config
               mountPath: /etc/container-agent
+            - name: shared-task-agent
+              mountPath: /task-agent
           env:
             - name: RUNNER_API
               value: {{ .Values.agent.runnerAPI }}
@@ -84,6 +89,8 @@ spec:
             - name: KUBE_LOGGING_IMAGE
               value: "{{- if .registry -}}{{ .registry }}/{{- end -}}{{ .repository }}:{{ .tag }}"
             {{- end }}
+            - name: KUBE_SHARED_TASK_AGENT_VOLUME
+              value: {{ include "container-agent.fullname" . }}
             - name: KUBE_LOGGING_SECRET
               value: {{ .Values.logging.serviceAccount.secret.name | quote }}
             - name: KUBE_AUTODETECT_PLATFORM
