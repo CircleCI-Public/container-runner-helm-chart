@@ -1,0 +1,21 @@
+{{- if .Values.agent.taskVolume.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "container-agent.fullname" . }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  volumeMode: Filesystem
+  {{- with .Values.agent.taskVolume }}
+  {{- if .storageClassName }}
+  storageClassName: {{ .storageClassName }}
+  {{- end }}
+  {{- if .selector }}
+  selector: {{- toYaml .selector | nindent 4 }}
+  {{- end }}
+  resources:
+    requests:
+      storage: 1Gi
+  {{- end }}
+{{- end }}

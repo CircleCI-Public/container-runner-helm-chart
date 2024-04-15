@@ -1,0 +1,14 @@
+suite: test persistent volume claim
+templates:
+  - pvc.yaml
+tests:
+  - it: should be created if the volume is enabled
+    set:
+      agent.taskVolume.enabled: true
+      agent.taskVolume.storageClassName: "storage-class"
+    asserts: 
+      - isNotNull:
+          path: spec
+      - equal:
+          path: spec.storageClassName
+          value: storage-class

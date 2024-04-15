@@ -2,7 +2,7 @@
 
 For deploying a CircleCI Container Agent
 
-![Version: 101.0.21](https://img.shields.io/badge/Version-101.0.21-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 3](https://img.shields.io/badge/AppVersion-3-informational?style=flat-square)
+![Version: 101.0.22](https://img.shields.io/badge/Version-101.0.22-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 3](https://img.shields.io/badge/AppVersion-3-informational?style=flat-square)
 
 ## Contributing
 
@@ -92,6 +92,9 @@ The command removes all the Kubernetes objects associated with the chart and del
 | agent.ssh.numPorts | int | `20` | Specify the total number of ports for SSH. This, along with `agent.ssh.startPort`, sets the port range. Note that the number of concurrent jobs rerun using SSH will be limited by the size of this range. |
 | agent.ssh.parametersRef | object | `{}` | Specify controller-specific configuration for the GatewayClass. For details, refer to the [Gateway API reference](https://gateway-api.sigs.k8s.io/api-types/gatewayclass/#gatewayclass-parameters), and the documentation for the Gateway controller specified by `agent.ssh.controllerName`. |
 | agent.ssh.startPort | int | `54782` | Define the start port for SSH. This, combined with `agent.ssh.numPorts`, is used to define a range of ports. Be aware that you may need to configure your firewall or security groups to allow this port range. |
+| agent.taskVolume | object | `{"enabled":false,"selector":{},"storageClassName":""}` | Use a volume to store task related binaries to avoid copying into the task pod filesystem for every task on startup. A volume of at least 1Gi is required. The chart will create a PVC and the cluster administrator must ensure an appropriate volume provider is available (or a provisioned volume) NOTE: THIS FEATURE IS EXPERIMENTAL. NO SUPPORT IS OFFERED AT THIS TIME |
+| agent.taskVolume.selector | object | `{}` | Volume selector assigned to the PVC (Optional) |
+| agent.taskVolume.storageClassName | string | `""` | Storage class name assigned to the PVC (Optional) |
 | agent.terminationGracePeriodSeconds | int | `18300` | Tasks are drained during the termination grace period, so this should be sufficiently long relative to the maximum run time to ensure graceful shutdown |
 | agent.tolerations | list | `[]` | Node tolerations for agent scheduling to nodes with taints Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/ |
 | logging | object | `{"image":{"registry":"","repository":"circleci/logging-collector","tag":3},"rbac":{"create":true,"role":{"name":"logging-collector","rules":[]}},"serviceAccount":{"annotations":{},"create":true,"name":"logging-collector","secret":{"name":"logging-collector-token"}}}` | Configuration values for the logging containers. These containers run alongside service containers and stream their logs to the CircleCI UI |

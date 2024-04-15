@@ -1,4 +1,5 @@
 {{- $fullName := include "container-agent.fullname" . -}}
+{{- $securityContext := include "container-agent.agent-security-context" . -}}
 
 apiVersion: apps/v1
 kind: Deployment
@@ -24,12 +25,12 @@ spec:
     {{- if .Values.agent.pullSecrets }}
       imagePullSecrets:
       {{- range .Values.agent.pullSecrets }}
-        - {{ toYaml . }}
+        - name: {{ toYaml . }}
       {{- end}}
     {{- end }}
       serviceAccountName: {{ include "container-agent.serviceAccountName" . }}
-    {{- if .Values.agent.podSecurityContext }}
-      securityContext: {{- toYaml .Values.agent.podSecurityContext | nindent 8 }}
+    {{- if $securityContext }}
+      securityContext: {{- $securityContext | nindent 8 }}
     {{- end }}
     {{- if .Values.agent.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.agent.terminationGracePeriodSeconds }}
@@ -38,6 +39,11 @@ spec:
         - name: taskpod-config
           configMap:
             name: {{ include "container-agent.fullname" . }}
+        {{- if .Values.agent.taskVolume.enabled }}
+        - name: shared-task-agent
+          persistentVolumeClaim:
+            claimName: {{ include "container-agent.fullname" . }}
+        {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           {{- with .Values.agent.image }}
@@ -48,12 +54,16 @@ spec:
           {{- end }}
           {{- end }}
           imagePullPolicy: {{ .Values.agent.image.pullPolicy }}
-        {{- if .Values.agent.containerSecurityContext }}
+          {{- if .Values.agent.containerSecurityContext }}
           securityContext: {{- toYaml .Values.agent.containerSecurityContext | nindent 12 }}
-        {{- end }}
+          {{- end }}
           volumeMounts:
             - name: taskpod-config
               mountPath: /etc/container-agent
+            {{- if .Values.agent.taskVolume.enabled }}
+            - name: shared-task-agent
+              mountPath: /task-agent
+            {{- end }}
           env:
             - name: RUNNER_API
               value: {{ .Values.agent.runnerAPI }}
@@ -88,6 +98,10 @@ spec:
               value: {{ .Values.logging.serviceAccount.secret.name | quote }}
             - name: KUBE_AUTODETECT_PLATFORM
               value: {{ .Values.agent.autodetectPlatform | quote }}
+            {{- if .Values.agent.taskVolume.enabled }}
+            - name: KUBE_SHARED_TASK_AGENT_VOLUME
+              value: {{ include "container-agent.fullname" . }}
+            {{- end }}
             {{- with .Values.agent }}
             # Agent logging settings
             - name: O11Y_LEVEL
@@ -149,9 +163,9 @@ spec:
 
           livenessProbe: {{ toYaml .Values.agent.livenessProbe | nindent 12 }}
           readinessProbe: {{ toYaml .Values.agent.readinessProbe | nindent 12 }}
-        {{- if .Values.agent.resources }}
+          {{- if .Values.agent.resources }}
           resources: {{ toYaml .Values.agent.resources | nindent 12 }}
-        {{- end }}
+          {{- end }}
     {{- if .Values.agent.nodeSelector }}
       nodeSelector: {{ toYaml .Values.agent.nodeSelector | nindent 8 }}
     {{- end }}
