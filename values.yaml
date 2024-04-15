@@ -200,16 +200,16 @@ agent:
     #       custom.io: my-annotation
     #   spec:
     #     containers:
-    #     - resources:
-    #         limits:
-    #           cpu: 500m
-    #       volumeMounts:
-    #         - name: xyz
-    #           mountPath: /path/to/mount
-    #   securityContext:
-    #     runAsNonRoot: true
-    #   imagePullSecrets:
-    #     - name: my_cred
+    #       - resources:
+    #           limits:
+    #             cpu: 500m
+    #         volumeMounts:
+    #           - name: xyz
+    #             mountPath: /path/to/mount
+    #     securityContext:
+    #       runAsNonRoot: true
+    #     imagePullSecrets:
+    #       - name: my_cred
     # circleci-runner/resourceClass2:
     #   token: XXXX
     #   spec:
@@ -268,17 +268,17 @@ agent:
   taskVolume: 
     
     # Enable the shared volume
-    enabled: true
+    enabled: false
 
     # -- Storage class name assigned to the PVC (Optional)
-    storageClassName: "name"
+    storageClassName: ""
 
     # -- Volume selector assigned to the PVC (Optional)
-    selector:
-      matchLabels:
-        release: "stable"
-      matchExpressions:
-        - {key: environment, operator: In, values: [dev]}
+    selector: {}
+      # matchLabels:
+      #   release: "stable"
+      # matchExpressions:
+      #   - {key: environment, operator: In, values: [dev]}
     
 # -- Kubernetes service account settings
 serviceAccount:
