@@ -7,7 +7,6 @@
 
 agent:
   replicaCount: 1
-
   # -- Agent image settings. NOTE: Setting an image digest will take precedence over the image tag
   image:
     registry: ""
@@ -25,8 +24,7 @@ agent:
   podAnnotations: {}
 
   # -- Security Context policies for agent pods
-  podSecurityContext:
-    fsGroup: 1500
+  podSecurityContext: {}
 
   # -- Security Context policies for agent containers
   containerSecurityContext: {}
@@ -202,16 +200,16 @@ agent:
     #       custom.io: my-annotation
     #   spec:
     #     containers:
-    #       - resources:
-    #           limits:
-    #             cpu: 500m
-    #         volumeMounts:
-    #           - name: xyz
-    #             mountPath: /path/to/mount
-    #     securityContext:
-    #       runAsNonRoot: true
-    #     imagePullSecrets:
-    #       - name: my_cred
+    #     - resources:
+    #         limits:
+    #           cpu: 500m
+    #       volumeMounts:
+    #         - name: xyz
+    #           mountPath: /path/to/mount
+    #   securityContext:
+    #     runAsNonRoot: true
+    #   imagePullSecrets:
+    #     - name: my_cred
     # circleci-runner/resourceClass2:
     #   token: XXXX
     #   spec:
@@ -263,6 +261,25 @@ agent:
     # Note that the number of concurrent jobs rerun using SSH will be limited by the size of this range.
     numPorts: 20
 
+  # -- Use a volume to store task related binaries to avoid copying into the task pod filesystem for
+  # every task on startup. A volume of at least 1Gi is required. The chart will create a PVC and the cluster
+  # administrator must ensure an appropriate volume provider is available (or a provisioned volume)
+  # NOTE: THIS FEATURE IS EXPERIMENTAL. NO SUPPORT IS OFFERED AT THIS TIME
+  taskVolume: 
+    
+    # Enable the shared volume
+    enabled: true
+
+    # -- Storage class name assigned to the PVC (Optional)
+    storageClassName: "name"
+
+    # -- Volume selector assigned to the PVC (Optional)
+    selector:
+      matchLabels:
+        release: "stable"
+      matchExpressions:
+        - {key: environment, operator: In, values: [dev]}
+    
 # -- Kubernetes service account settings
 serviceAccount:
   create: true
