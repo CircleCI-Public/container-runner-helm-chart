@@ -2,7 +2,7 @@
 
 For deploying a CircleCI Container Agent
 
-![Version: 101.0.23](https://img.shields.io/badge/Version-101.0.23-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 3](https://img.shields.io/badge/AppVersion-3-informational?style=flat-square)
+![Version: 101.0.24](https://img.shields.io/badge/Version-101.0.24-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 3](https://img.shields.io/badge/AppVersion-3-informational?style=flat-square)
 
 ## Contributing
 
@@ -12,8 +12,7 @@ For deploying a CircleCI Container Agent
 
 Kubernetes: `>= 1.25`
 
-- Kubernetes 1.25+
-- Helm 3.x
+Helm: 3.x
 
 ### Installing the Chart
 
