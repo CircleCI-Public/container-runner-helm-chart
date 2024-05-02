@@ -12,8 +12,7 @@ For deploying a CircleCI Container Agent
 
 Kubernetes: `>= 1.25`
 
-- Kubernetes 1.25+
-- Helm 3.x
+Helm: 3.x
 
 ### Installing the Chart
 
