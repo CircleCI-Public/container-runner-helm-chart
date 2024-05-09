@@ -99,7 +99,7 @@ spec:
             - name: KUBE_AUTODETECT_PLATFORM
               value: {{ .Values.agent.autodetectPlatform | quote }}
             {{- if .Values.agent.taskVolume.enabled }}
-            - name: KUBE_SHARED_TASK_AGENT_VOLUME
+            - name: KUBE_SHARED_TASK_VOLUME
               value: {{ include "container-agent.fullname" . }}
             {{- end }}
             {{- with .Values.agent }}
