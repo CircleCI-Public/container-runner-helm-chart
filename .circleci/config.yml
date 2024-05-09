@@ -34,7 +34,6 @@ jobs:
     resource_class: medium
     steps:
       - checkout
-      - run: ./do check-version-bump
       - run: helm lint
       - run: helm template --debug .
       - run: ./do unit-tests
@@ -82,6 +81,7 @@ jobs:
       - checkout
       - attach_workspace:
           at: .
+      - run: ./do check-version-bump
       - run: gem install --no-document package_cloud
       - run: ./do publish
       - notify_slack:

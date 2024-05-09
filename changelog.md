@@ -1,5 +1,13 @@
 # Container Agent Helm Chart Changelog
 
+# Edge
+
+# 101.0.22
+
+- [#47](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/47) [EXPERIMENTAL] Set correct env var for shared task volume
+- [#44](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/44) [EXPERIMENTAL] Add toggle for shared task volume
+- [#45](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/45) Set minimum kubeVersion in Chart.yaml
+
 This is the Container Agent Helm Chart changelog
 # 101.0.21
 - [#42](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/42) Fix formatting bug when adding role and logging role rules
