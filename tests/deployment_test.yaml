@@ -15,6 +15,16 @@ tests:
           path: spec.template.spec.containers[0].image
           value: circleci/runner-agent:kubernetes-edge
 
+  - it: should set the pull secrets if they are present
+    set:
+      agent.pullSecrets: ["secret", "1"]
+    asserts:
+      - equal:
+          path: spec.template.spec.imagePullSecrets
+          value:
+            - name: "secret"
+            - name: "1"
+
   - it: should have the default logging collector configuration
     asserts:
       - contains:
