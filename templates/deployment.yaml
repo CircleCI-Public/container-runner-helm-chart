@@ -25,7 +25,7 @@ spec:
     {{- if .Values.agent.pullSecrets }}
       imagePullSecrets:
       {{- range .Values.agent.pullSecrets }}
-        - name: {{ toYaml . }}
+        - name: {{ . | quote}}
       {{- end}}
     {{- end }}
       serviceAccountName: {{ include "container-agent.serviceAccountName" . }}
