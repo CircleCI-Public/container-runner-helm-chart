@@ -5,8 +5,8 @@
 # 101.1.0
 
 - [#50](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/50) Take a list of pull secret names rather than requiring full YAML maps for agent image pull secrets
-- [#47](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/47) [EXPERIMENTAL] Set correct env var for shared task volume
-- [#44](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/44) [EXPERIMENTAL] Add toggle for shared task volume
+~~- [#47](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/47) [EXPERIMENTAL] Set correct env var for shared task volume~~
+~~- [#44](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/44) [EXPERIMENTAL] Add toggle for shared task volume~~
 - [#45](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/45) Set minimum kubeVersion in Chart.yaml
 
 This is the Container Agent Helm Chart changelog

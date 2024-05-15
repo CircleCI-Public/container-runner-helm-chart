@@ -137,31 +137,6 @@ tests:
           content:
             name: O11Y_LEVEL
             value: "error"
-
-  - it: should have the expected volumes mounted if task volume is enabled
-    set:
-      agent.taskVolume.enabled: true
-    asserts:
-      - contains:
-          path: spec.template.spec.volumes
-          content:
-            name: shared-task-agent
-            persistentVolumeClaim:
-              claimName: RELEASE-NAME-container-agent
-      - contains:
-          path: spec.template.spec.containers[0].volumeMounts
-          content:
-            name: shared-task-agent
-            mountPath: /task-agent
-      - contains:
-          path: spec.template.spec.containers[0].env
-          content:
-            name: KUBE_SHARED_TASK_VOLUME
-            value: RELEASE-NAME-container-agent
-      - equal:
-          path: spec.template.spec.securityContext
-          value:
-            fsGroup: 1500
             
   - it: should have proxy configured if given
     set:

@@ -93,15 +93,6 @@ true
 {{- end }}
 {{- end }}
 
-{{- define "container-agent.agent-security-context" -}}
-{{- if .Values.agent.taskVolume.enabled }}
-{{- range $key, $value := .Values.agent.podSecurityContext -}}
-{{- printf "%s: %s\n" $key $value -}}
-{{- end -}}
-fsGroup: 1500
-{{- end }}
-{{- end }}
-
 {{/* 
 proxy.env defines http proxy environment variables. It expects a list 
 with .Values.proxy first and additional no_proxy hosts as the         
