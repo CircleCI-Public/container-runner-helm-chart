@@ -4,9 +4,13 @@ For deploying a CircleCI Container Agent
 
 ![Version: 101.1.0](https://img.shields.io/badge/Version-101.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 3](https://img.shields.io/badge/AppVersion-3-informational?style=flat-square)
 
-## Contributing
+## Support
 
-### Prerequisites
+Support for the CircleCI Self-Hosted Runner helm chart can be found on the [CircleCI support page](https://support.circleci.com/hc/en-us). There docs, support articles, and community support threads may be reviewed as well as support tickets raised.
+
+Feature requests for the CircleCI Self-Hosted Runner helm chart can be raised and voted on via the [CircleCI Canny board](https://circleci.canny.io/)
+
+## Installation
 
 ## Requirements
 
@@ -107,3 +111,14 @@ The command removes all the Kubernetes objects associated with the chart and del
 | proxy.no_proxy | list | `[]` | List of hostnames, IP CIDR blocks exempt from proxying. Loopback and intra-service traffic is never proxied. |
 | rbac | object | `{"clusterRole":{"name":"","namespace":"","rules":[]},"create":true,"role":{"name":"","namespace":"","rules":[]}}` | Kubernetes Roles Based Access Control settings |
 | serviceAccount | object | `{"annotations":{},"automountServiceAccountToken":true,"create":true,"name":""}` | Kubernetes service account settings |
+
+## Contribution
+
+We are always happy to review pull requests from the community. A few guideline should be followed when preparing a pull request for review.
+
+* Ensure the README file is current by running `./do generate-readme`
+* Run `helm lint` to lint the chart
+* Add [unit tests](https://github.com/CircleCI-Public/container-runner-helm-chart/tree/main/tests) to cover new changes and functionality
+* Run `./do unit-tests` to run the chart unit tests locally and ensure they pass
+* Include a description of the changes, any testing you've done (we love screenshots), and the reasoning for the changes in your pull request
+* Include a description of the change linked to the PR in the CHANGELOG.md file under the `# Edge` header, using the pull request number as the link anchor
