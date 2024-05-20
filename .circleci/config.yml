@@ -29,6 +29,7 @@ executors:
       - image: cimg/ruby:3.2.2
 
 jobs:
+  # this is the validate job
   validate:
     executor: helm
     resource_class: medium
