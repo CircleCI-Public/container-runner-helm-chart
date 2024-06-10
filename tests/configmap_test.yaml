@@ -1,0 +1,56 @@
+suite: test configmap
+templates:
+  - configmap.yaml
+tests:
+  - it: should template resource classes without token into the config map
+    set:
+      agent.resourceClasses:
+        circleci-runner/resourceClass:
+          token: TOKEN
+          metadata:
+            annotations:
+              custom.io: my-annotation
+    asserts:
+      - isKind:
+          of: ConfigMap
+      - equal:
+          path: data
+          value:
+            taskpods: |
+              resourceClasses:
+                circleci-runner.resourceClass:
+                  metadata:
+                    annotations:
+                      custom.io: my-annotation
+
+  - it: should template the global service container configuration
+    set:
+      agent.resourceClasses:
+        circleci-runner/resourceClass:
+          token: TOKEN
+          metadata:
+            annotations:
+              custom.io: my-annotation
+      agent.serviceContainers:
+        exact:
+          - docker.io/some-repo/generic-image:a-tag:
+              resources:
+                limits:
+                  cpu: 500m
+
+    asserts:
+      - equal:
+          path: data
+          value:
+            taskpods: |
+              resourceClasses:
+                circleci-runner.resourceClass:
+                  metadata:
+                    annotations:
+                      custom.io: my-annotation
+              serviceContainers:
+                exact:
+                - docker.io/some-repo/generic-image:a-tag:
+                    resources:
+                      limits:
+                        cpu: 500m
