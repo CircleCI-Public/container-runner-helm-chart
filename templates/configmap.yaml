@@ -15,5 +15,7 @@ data:
       {{- end }}
       {{- end }}
 {{- end }}
+    {{- if .Values.agent.serviceContainers }}
     serviceContainers:
-      {{- toYaml .Values.agent.serviceContainers | nindent 6 }}:
+      {{- toYaml .Values.agent.serviceContainers | nindent 6 }}
+    {{- end }}
