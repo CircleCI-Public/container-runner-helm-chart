@@ -2,6 +2,8 @@
 
 # Edge
 
+# 101.1.1
+
 [#54](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/50) Load global service container config & add example usage 
 
 # 101.1.0
