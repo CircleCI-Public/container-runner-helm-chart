@@ -33,10 +33,10 @@ tests:
               custom.io: my-annotation
       agent.serviceContainers:
         exact:
-          - docker.io/some-repo/generic-image:a-tag:
-              resources:
-                limits:
-                  cpu: 500m
+          docker.io/some-repo/generic-image:a-tag:
+            resources:
+              limits:
+                cpu: 500m
 
     asserts:
       - equal:
@@ -50,7 +50,7 @@ tests:
                       custom.io: my-annotation
               serviceContainers:
                 exact:
-                - docker.io/some-repo/generic-image:a-tag:
+                  docker.io/some-repo/generic-image:a-tag:
                     resources:
                       limits:
                         cpu: 500m

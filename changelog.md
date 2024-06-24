@@ -2,6 +2,8 @@
 
 # Edge
 
+[#59](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/59) Fix service container config example & update test
+
 # 101.1.1
 
 [#56](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/56) Fix bug with service container config loading

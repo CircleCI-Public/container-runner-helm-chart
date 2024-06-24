@@ -220,26 +220,26 @@ agent:
   # to your job's service containers. TODO: Full docs link
   serviceContainers: {}
     # exact:
-    #   - docker.io/some-repo/generic-image:a-tag:
+    #   docker.io/some-repo/generic-image:a-tag:
     #       resources:
     #         limits:
     #           cpu: 500m
     # pattern:
-    #   - (docker\.io)\/?my\-repo\/.*:.*:
+    #   (docker\.io)\/?my\-repo\/.*:.*:
     #       resources:
     #         limits:
     #           cpu: 1
     #           memory: 512Mi
     # prefix:
-    #   - docker.io/their-repo/:
+    #   docker.io/their-repo/:
     #       resources:
     #         limits:
     #           cpu: 250m
     # default:
-    #     resources:
-    #       limits:
-    #         cpu: 250m
-    #         memory: 256Mi
+    #   resources:
+    #     limits:
+    #       cpu: 250m
+    #       memory: 256Mi
 
   ## -- Resource class constraint validation checker settings. The checker will periodically validate the
   ## node constraints in the resource class spec to ensure task pods can be scheduled before claiming tasks
