@@ -9,13 +9,15 @@ workflows:
       - validate
       - check_readme
       - package
+      - smoke-tests:
+          context: runner-deploy
 
       - approve-publish:
           type: approval
           filters:
             branches:
               only: [ main ]
-          requires: [ validate, package ]
+          requires: [ validate, package, smoke-tests ]
       - publish:
           context: runner-deploy
           requires: [ approve-publish ]
@@ -27,6 +29,9 @@ executors:
   ruby:
     docker:
       - image: cimg/ruby:3.2.2
+  go:
+    docker:
+      - image: cimg/go:1.22
 
 jobs:
   validate:
@@ -37,6 +42,20 @@ jobs:
       - run: helm lint
       - run: helm template --debug .
       - run: ./do unit-tests
+      - notify_failing_main
+
+  smoke-tests:
+    executor: go
+    steps:
+      - checkout
+      - run:
+          name: Clone init repo
+          command: git clone git@github.com:circleci/runner-init.git
+      - run:
+          name: Run the smoke tests
+          command: |
+            cd ./runner-init
+            SMOKE_TESTS_KUBERNETES_HELM_CHART_BRANCH="${CIRCLE_BRANCH}" ./do smoke-tests
       - notify_failing_main
 
   check_readme:
