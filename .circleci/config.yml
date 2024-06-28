@@ -11,6 +11,7 @@ workflows:
       - package
       - smoke-tests:
           context: runner-deploy
+          requires: [ validate ]
 
       - approve-publish:
           type: approval
@@ -55,7 +56,10 @@ jobs:
           name: Run the smoke tests
           command: |
             cd ./runner-init
-            SMOKE_TESTS_KUBERNETES_HELM_CHART_BRANCH="${CIRCLE_BRANCH}" ./do smoke-tests
+
+            SMOKE_TESTS_MACHINE_SKIP="true" \
+            SMOKE_TESTS_KUBERNETES_HELM_CHART_BRANCH="${CIRCLE_BRANCH}" \
+            ./do smoke-tests
       - notify_failing_main
 
   check_readme:
