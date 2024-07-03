@@ -136,7 +136,7 @@ agent:
 
   # -- Pod disruption budget settings
   pdb:
-    create: true
+    create: false
     minAvailable: 1
     maxUnavailable: 1
 
