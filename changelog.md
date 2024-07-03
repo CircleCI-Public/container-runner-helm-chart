@@ -2,6 +2,7 @@
 
 # Edge
 
+[#62](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/62) Fix syntax issue in pdb template .
 [#59](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/59) Fix service container config example & update test
 
 # 101.1.1
