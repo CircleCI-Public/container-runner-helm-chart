@@ -1,6 +1,7 @@
 version: 2.1
 
 orbs:
+  gh: circleci/github-cli@2.3.0
   slack: circleci/slack@4.12.5
 
 workflows:
@@ -12,16 +13,32 @@ workflows:
       - smoke-tests:
           context: runner-deploy
           requires: [ validate ]
+      - gh/release:
+          name: "tag-prerelease"
+          notes-file: changelog.md
+          prerelease: true
+          tag: "$(./do version)-rc"
+          context: runner-deploy
+          filters:
+            branches:
+              only: [ main ]
+          requires: [ validate, package, smoke-tests ]
 
       - approve-publish:
           type: approval
           filters:
             branches:
               only: [ main ]
-          requires: [ validate, package, smoke-tests ]
+          requires: [ tag-prerelease ]
       - publish:
           context: runner-deploy
           requires: [ approve-publish ]
+      - gh/release:
+          name: "tag-release"
+          context: runner-deploy
+          notes-file: changelog.md
+          tag: "$(./do version)"
+          requires: [ publish ]
 
 executors:
   helm:
