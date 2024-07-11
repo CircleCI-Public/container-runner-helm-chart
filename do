@@ -27,10 +27,22 @@ check-version-bump() {
 help_package="Package the Helm chart"
 package() {
     mkdir -p target
-    cd target
+    cd target || return
+
+    local arg="${1:-}"
 
     echo 'Package Helm chart'
-    helm package ..
+    case ${arg} in
+    "sign")
+        echo 'Sign Helm chart'
+        helm package --sign --key "${GPG_ID:?required}" ..
+        echo 'Verify Helm chart signature'
+        helm verify ./container-agent-*.tgz
+        ;;
+    *)
+        helm package ..
+        ;;
+    esac
 
     echo 'Check contents of Helm package'
     ls .
