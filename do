@@ -27,10 +27,10 @@ check-version-bump() {
 help_package="Package the Helm chart"
 package() {
     mkdir -p target
-    cd target || return
+    cd target
 
     local arg="${1:-}"
-    if [ ! -z "${arg}" ]; then
+    if [ -n "${arg}" ]; then
         shift
     fi
 
