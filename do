@@ -29,8 +29,24 @@ package() {
     mkdir -p target
     cd target
 
+    local arg="${1:-}"
+    if [ -n "${arg}" ]; then
+        shift
+    fi
+
     echo 'Package Helm chart'
-    helm package ..
+    case ${arg} in
+    "sign")
+        echo 'Sign Helm chart'
+        # shellcheck disable=SC2086
+        helm package --sign --key "${KEY:-<eng-on-prem@circleci.com>}" --keyring ${KEYRING:-~/.gnupg/secring.gpg} .. "$@"
+        echo 'Verify Helm chart signature'
+        helm verify ./container-agent-*.tgz
+        ;;
+    *)
+        helm package ..
+        ;;
+    esac
 
     echo 'Check contents of Helm package'
     ls .
