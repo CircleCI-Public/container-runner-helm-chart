@@ -2,6 +2,7 @@
 
 # Edge
 
+[#64](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/64) Start signing the Helm chart to ensure provenance: https://helm.sh/docs/topics/provenance/
 [#59](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/59) Fix service container config example & update test
 
 # 101.1.1
