@@ -30,12 +30,16 @@ package() {
     cd target || return
 
     local arg="${1:-}"
+    if [ ! -z "${arg}" ]; then
+        shift
+    fi
 
     echo 'Package Helm chart'
     case ${arg} in
     "sign")
         echo 'Sign Helm chart'
-        helm package --sign --key "${GPG_ID:?required}" ..
+        # shellcheck disable=SC2086
+        helm package --sign --key "${KEY:-<eng-on-prem@circleci.com>}" --keyring ${KEYRING:-~/.gnupg/secring.gpg} .. "$@"
         echo 'Verify Helm chart signature'
         helm verify ./container-agent-*.tgz
         ;;
