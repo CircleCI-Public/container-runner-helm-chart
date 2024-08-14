@@ -177,3 +177,13 @@ tests:
           content:
             name: no_proxy
             value: "localhost,abcd.server.com,svc.cluster.local"
+
+  - it: should set the ndots
+    set:
+      agent.dnsConfig.ndots: "2"
+    asserts:
+      - equal:
+          path: spec.template.spec.dnsConfig.options
+          value:
+            - name: "ndots"
+              value: "2"
