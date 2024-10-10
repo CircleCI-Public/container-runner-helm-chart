@@ -8,7 +8,8 @@ workflows:
     jobs:
       - validate
       - check_readme
-      - package
+      - package:
+          context: runner-signing
       - smoke-tests:
           context: runner-deploy
           requires: [ validate ]
@@ -18,10 +19,13 @@ workflows:
           filters:
             branches:
               only: [ main ]
-          requires: [ validate, package, smoke-tests ]
+          requires: [ package, smoke-tests ]
       - publish:
           context: runner-deploy
           requires: [ approve-publish ]
+      - create-release:
+          context: runner-deploy
+          requires: [ publish ]
 
 executors:
   helm:
@@ -33,6 +37,9 @@ executors:
   go:
     docker:
       - image: cimg/go:1.22
+  gh:
+    docker:
+      - image: maniator/gh:latest
 
 jobs:
   validate:
@@ -91,7 +98,26 @@ jobs:
       - checkout
       - attach_workspace:
           at: .
-      - run: ./do package
+      - run:
+          name: "Install signing keys"
+          command: |
+            exec 2>/dev/null
+
+            echo "Importing signing keys"
+            echo -n "${SIGNING_KEY_ENCODED}" | base64 --decode >signing_key_decoded.key
+            gpg --batch --yes --passphrase "${SIGNING_KEY_PASSPHRASE}" --import signing_key_decoded.key
+            rm signing_key_decoded.key
+            curl https://keys.openpgp.org/vks/v1/by-fingerprint/"${GPG_ID}" >pub-key.asc
+            gpg --import pub-key.asc
+            rm pub-key.asc
+
+            echo "Convert to legacy gpg format per Helm requirements"
+            gpg --export >~/.gnupg/pubring.gpg
+            gpg --batch --yes --pinentry-mode=loopback --passphrase "${SIGNING_KEY_PASSPHRASE}" --export-secret-keys "${GPG_ID}" >~/.gnupg/secring.gpg
+      - run:
+          name: "Package and sign chart"
+          command: |
+            echo "${SIGNING_KEY_PASSPHRASE}" | ./do package sign --passphrase-file -
       - persist_to_workspace:
           root: .
           paths: [ ./target ]
@@ -111,6 +137,17 @@ jobs:
           header: ":helm: :circleci-runner: Container runner Helm chart published"
           version: "$(./do version)"
       - notify_failing_main
+
+  create-release:
+    executor: gh
+    steps:
+      - checkout
+      - run: apk add --no-cache bash
+      - run:
+          name: Create Release
+          command: |
+            tag="v$(./do version)"
+            gh release create "${tag}" --notes-file changelog.md -R "CircleCI-Public/container-runner-helm-chart"
 
 commands:
   notify_failing_main:
