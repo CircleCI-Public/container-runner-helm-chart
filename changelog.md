@@ -3,13 +3,26 @@
 # Edge
 
 [#65](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/65) Make dnsConfig ndots configurable
+
+[#62](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/62) Fix syntax issue in pdb template .
+
+[#58](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/58) Use namespace for service account
+
+# 101.1.2
+
+[#66](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/66) Grant role list permissions for Pods and events. This change supports the migration to Kubernetes informers, which require listing resources on startup and during resync operations.
+
 [#64](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/64) Start signing the Helm chart to ensure provenance: https://helm.sh/docs/topics/provenance/
+
 [#59](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/59) Fix service container config example & update test
+
 
 # 101.1.1
 
 [#56](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/56) Fix bug with service container config loading
+
 [#54](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/54) Load global service container config & add example usage 
+
 
 # 101.1.0
 
