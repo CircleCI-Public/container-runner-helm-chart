@@ -2,8 +2,9 @@
 
 # Edge
 
-[#62](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/62) Fix syntax issue in pdb template .
+[#65](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/65) Make dnsConfig ndots configurable
 
+[#62](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/62) Fix syntax issue in pdb template .
 
 [#58](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/58) Use namespace for service account
 

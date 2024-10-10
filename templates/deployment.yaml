@@ -21,6 +21,12 @@ spec:
         {{ $key }}: {{ $value | quote }}
       {{- end }}
     spec:
+      {{- if .Values.agent.dnsConfig }}
+      dnsConfig:
+        options:
+        - name: ndots
+          value: {{ .Values.agent.dnsConfig.ndots | quote }}
+      {{- end }}
     {{- if .Values.agent.pullSecrets }}
       imagePullSecrets:
       {{- range .Values.agent.pullSecrets }}
