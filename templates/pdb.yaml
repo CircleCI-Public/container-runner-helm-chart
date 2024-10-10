@@ -12,5 +12,6 @@ spec:
   maxUnavailable: {{ .Values.agent.pdb.maxUnavailable }}
 {{- end }}
   selector:
-    matchLabels: {{- toYaml .Values.agent.matchLabels | nindent 6 }}
+    matchLabels:
+      {{- toYaml .Values.agent.matchLabels | nindent 6 }}
 {{- end }}
