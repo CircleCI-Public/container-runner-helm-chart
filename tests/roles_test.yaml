@@ -8,11 +8,6 @@ tests:
         - apiGroups: [""]
           resources: ["configmaps"]
           verbs: ["get"]
-      logging.rbc.create: true
-      logging.rbac.role.rules:
-        - apiGroups: [""]
-          resources: ["configmaps"]
-          verbs: ["get"]
     asserts:
       - equal:
           path: rules
@@ -30,16 +25,3 @@ tests:
               resources: ["configmaps"]
               verbs: ["get"]
         documentIndex: 0
-      - equal:
-          path: rules
-          value:
-            - apiGroups: [""]
-              resources: ["pods"]
-              verbs: ["watch", "list"]
-            - apiGroups: [""]
-              resources: ["pods/log"]
-              verbs: ["get"]
-            - apiGroups: [""]
-              resources: ["configmaps"]
-              verbs: ["get"]
-        documentIndex: 2

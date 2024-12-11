@@ -1,3 +1,4 @@
 agent:
   ssh:
     enabled: true
+    numPorts: 1

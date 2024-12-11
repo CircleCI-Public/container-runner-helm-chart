@@ -94,7 +94,7 @@ unit-tests() {
         helm plugin install https://github.com/helm-unittest/helm-unittest.git
     fi
 
-    helm unittest -f 'tests/*.yaml' . "$@"
+    helm unittest -f 'tests/**/*_test.yaml' . "$@"
 }
 
 # This variable is used, but shellcheck can't tell.

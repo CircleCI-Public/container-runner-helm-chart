@@ -61,14 +61,6 @@ RBAC names
 {{- end }}
 {{- end }}
 
-{{- define "container-agent.logging.serviceAccountName" -}}
-{{- if .Values.logging.serviceAccount.create }}
-{{- default (include "container-agent.fullname" .) .Values.logging.serviceAccount.name }}
-{{- else }}
-{{- "default"}}
-{{- end }}
-{{- end }}
-
 {{- define "container-agent.tokens" -}}
 {{- range $rc, $value := .Values.agent.resourceClasses -}}
 {{- range $key, $value := $value -}}
