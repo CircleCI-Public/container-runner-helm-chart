@@ -1,2 +1,6 @@
-# Ephemeral directory
+# File system and IDE files
+.DS_Store
+/.idea
+/*.iml
+/bin
 /target

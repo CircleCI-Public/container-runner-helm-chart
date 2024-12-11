@@ -49,6 +49,7 @@ jobs:
       - checkout
       - run: helm lint
       - run: helm template --debug .
+      - run: ./do kubeconform
       - run: ./do unit-tests
       - notify_failing_main
 

@@ -67,6 +67,21 @@ publish() {
 
 # This variable is used, but shellcheck can't tell.
 # shellcheck disable=SC2034
+help_kubeconform="Run helm kubeconform"
+kubeconform() {
+    if ! helm plugin list | grep kubeconform >/dev/null; then
+        echo 'Installing helm kubeconform'
+        helm plugin install https://github.com/jtyr/kubeconform-helm
+    fi
+
+    helm kubeconform --ignore-missing-schema --verbose --summary --strict "$@" \
+        --schema-location default \
+        --schema-location https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json \
+        .
+}
+
+# This variable is used, but shellcheck can't tell.
+# shellcheck disable=SC2034
 help_unit_tests="Run helm unittest"
 unit-tests() {
     if ! [ -x "$(command -v helm)" ]; then
@@ -91,6 +106,13 @@ generate-readme() {
     fi
 
     helm-docs -t ./templates/README.md.gotmpl . "$@"
+}
+
+install-go-bin() {
+    for pkg in "${@}"; do
+        GOBIN="${PWD}/bin" go install "${pkg}" &
+    done
+    wait
 }
 
 help-text-intro() {
