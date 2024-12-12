@@ -2,6 +2,8 @@
 
 # Edge
 
+[#68](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/68) Refactor: Move `logging` container-related resources to their own component subdirectory. This is to work towards a more organized Chart.
+
 [#65](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/65) Make dnsConfig ndots configurable
 
 [#62](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/62) Fix syntax issue in pdb template .
