@@ -299,11 +299,9 @@ rbac:
   role:
     name: ""
     rules: []
-    namespace: ""
   clusterRole:
     name: ""
     rules: []
-    namespace: ""
 
 # -- Configuration values for the logging containers.
 # These containers run alongside service containers and stream their logs to the CircleCI UI

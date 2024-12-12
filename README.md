@@ -110,7 +110,7 @@ The command removes all the Kubernetes objects associated with the chart and del
 | proxy.http | object | `{"auth":{"enabled":false,"password":null,"username":null},"host":"proxy.example.com","port":3128}` | Proxy for HTTP requests |
 | proxy.https | object | `{"auth":{"enabled":false,"password":null,"username":null},"host":"proxy.example.com","port":3128}` | Proxy for HTTPS requests |
 | proxy.no_proxy | list | `[]` | List of hostnames, IP CIDR blocks exempt from proxying. Loopback and intra-service traffic is never proxied. |
-| rbac | object | `{"clusterRole":{"name":"","namespace":"","rules":[]},"create":true,"role":{"name":"","namespace":"","rules":[]}}` | Kubernetes Roles Based Access Control settings |
+| rbac | object | `{"clusterRole":{"name":"","rules":[]},"create":true,"role":{"name":"","rules":[]}}` | Kubernetes Roles Based Access Control settings |
 | serviceAccount | object | `{"annotations":{},"automountServiceAccountToken":true,"create":true,"name":""}` | Kubernetes service account settings |
 
 ## Contribution

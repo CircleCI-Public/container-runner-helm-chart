@@ -1,7 +1,6 @@
 {{- if .Values.agent.autodetectPlatform }}
 {{- $clusterRole :=  .Values.rbac.clusterRole }}
 {{- $clusterRoleName := $clusterRole.name | quote }}
-{{- $namespace := .Release.Namespace | quote }}
 {{- $fullname := include "container-agent.fullname" . }}
 {{- $name := printf "%s:%s" $fullname $clusterRoleName | quote }}
 {{- $serviceAccountName := include "container-agent.serviceAccountName" . }}
@@ -10,7 +9,6 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: {{ $name }}
-  namespace: {{ $namespace }}
 rules:
   - apiGroups: [""]
     resources: ["nodes"]
@@ -23,11 +21,10 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: {{ $name }}
-  namespace: {{ $namespace }}
 subjects:
   - kind: ServiceAccount
     name: {{ $serviceAccountName }}
-    namespace: {{ $namespace }}
+    namespace: {{ .Release.Namespace | quote }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
