@@ -3,7 +3,6 @@ apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
   name: {{ template "container-agent.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
 spec:
 {{- if .Values.agent.pdb.minAvailable }}
   minAvailable: {{ .Values.agent.pdb.minAvailable }}

@@ -6,7 +6,6 @@ should create Gateway and Service resources if enabled:
       finalizers:
         - gateway-exists-finalizer.gateway.networking.k8s.io
       name: RELEASE-NAME-container-agent-ssh
-      namespace: NAMESPACE
     spec:
       controllerName: example.net/gateway-controller
       parametersRef:
@@ -19,7 +18,6 @@ should create Gateway and Service resources if enabled:
     kind: Gateway
     metadata:
       name: RELEASE-NAME-container-agent-ssh
-      namespace: NAMESPACE
     spec:
       gatewayClassName: RELEASE-NAME-container-agent-ssh
       listeners:
@@ -46,7 +44,6 @@ should create Gateway and Service resources if enabled:
     kind: TCPRoute
     metadata:
       name: ssh-22
-      namespace: NAMESPACE
     spec:
       parentRefs:
         - name: RELEASE-NAME-container-agent-ssh
@@ -60,7 +57,6 @@ should create Gateway and Service resources if enabled:
     kind: TCPRoute
     metadata:
       name: ssh-23
-      namespace: NAMESPACE
     spec:
       parentRefs:
         - name: RELEASE-NAME-container-agent-ssh
@@ -74,7 +70,6 @@ should create Gateway and Service resources if enabled:
     kind: TCPRoute
     metadata:
       name: ssh-24
-      namespace: NAMESPACE
     spec:
       parentRefs:
         - name: RELEASE-NAME-container-agent-ssh
@@ -88,7 +83,6 @@ should create Gateway and Service resources if enabled:
     kind: Service
     metadata:
       name: RELEASE-NAME-container-agent-ssh
-      namespace: NAMESPACE
     spec:
       ports:
         - name: ssh-22
