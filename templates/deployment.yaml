@@ -109,6 +109,15 @@ spec:
               value: {{ .gc.interval | quote }}
             {{- end }}
 
+            {{- with .Values.orchestrator }}
+            # Settings for the orchestrator init container
+            {{- $imageRef := include "image.ref" .image -}}
+            {{- if ne $imageRef "" -}}
+            - name: KUBE_RUNNER_INIT_IMAGE
+              value: {{ $imageRef }}
+            {{- end -}}
+            {{- end -}}
+
             {{- if .Values.agent.ssh.enabled }}
             {{- $sshName := printf "%s-ssh" (include "container-agent.fullname" .) }}
             - name: KUBE_SSH_IS_ENABLED
