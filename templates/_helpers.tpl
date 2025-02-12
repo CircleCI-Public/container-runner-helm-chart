@@ -135,7 +135,7 @@ It only includes parts of the reference that are provided, producing an empty st
     {{- $image = printf "%s%s" $image $repository -}}
     {{- if $digest -}}
       {{- if not (regexMatch "^[a-zA-Z0-9]+:" $digest) -}}
-        {{- $digest = printf "sha256:%s" $digest -}} # Defaults to `sha256` if no hash algorithm is provided
+        {{- $digest = printf "sha256:%s" $digest -}}
       {{- end -}}
       {{- $image = printf "%s@%s" $image $digest -}}
     {{- else if $tag -}}

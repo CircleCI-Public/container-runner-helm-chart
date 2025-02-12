@@ -111,12 +111,14 @@ spec:
 
             {{- with .Values.orchestrator }}
             # Settings for the orchestrator init container
+
             {{- $imageRef := include "image.ref" .image -}}
-            {{- if ne $imageRef "" -}}
+            {{- if ne $imageRef "" }}
             - name: KUBE_RUNNER_INIT_IMAGE
-              value: {{ $imageRef }}
-            {{- end -}}
-            {{- end -}}
+              value: {{ $imageRef | quote }}
+            {{- end }}
+
+            {{- end }}
 
             {{- if .Values.agent.ssh.enabled }}
             {{- $sshName := printf "%s-ssh" (include "container-agent.fullname" .) }}
