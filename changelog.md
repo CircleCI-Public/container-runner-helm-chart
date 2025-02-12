@@ -2,6 +2,8 @@
 
 # Edge
 
+[#71](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/71) Added an option to configure the image name for the orchestrator container, enabling hosting in a private registry or an air-gapped environment on CircleCI server. See the [runner-init repository](https://github.com/circleci/runner-init) for more information.
+
 [#68](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/68) Refactor: Move `logging` container-related resources to their own component subdirectory. This is to work towards a more organized Chart.
 
 [#65](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/65) Make dnsConfig ndots configurable
