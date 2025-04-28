@@ -94,3 +94,10 @@ tests:
                 requests:
                   cpu: 100m
                   memory: 128Mi
+
+  - it: should be empty when no resourceClasses are set
+    set:
+      agent.resourceClasses: {}
+    asserts:
+     - hasDocuments:
+        count: 0
