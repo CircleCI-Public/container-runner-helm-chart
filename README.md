@@ -90,7 +90,7 @@ The command removes all the Kubernetes objects associated with the chart and del
 | agent.readinessProbe.successThreshold | int | `1` |  |
 | agent.readinessProbe.timeoutSeconds | int | `1` |  |
 | agent.replicaCount | int | `1` |  |
-| agent.resourceClasses | object | `{}` | Resource class settings. The tokens specified here will be used to claim tasks & the tasks will be launched with the configured configs Ref: https://circleci.com/docs/container-runner/#resource-class-configuration-custom-pod |
+| agent.resourceClasses | object | `{}` | Resource class settings. The tokens specified here will be used to claim tasks & the tasks will be launched with the configured configs If you leave this unset you must provide your own configmap named {{ include "container-agent.fullname" . }} Ref: https://circleci.com/docs/container-runner/#resource-class-configuration-custom-pod |
 | agent.resources | object | `{}` | Agent pod resource configuration Ref: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/ |
 | agent.runnerAPI | string | `"https://runner.circleci.com"` | CircleCI Runner API URL |
 | agent.serviceContainers | object | `{}` | Configuration for service containers. This allows different a different container spec to be passed to your job's service containers. TODO: Full docs link |
