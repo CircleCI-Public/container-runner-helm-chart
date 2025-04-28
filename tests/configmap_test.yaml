@@ -54,3 +54,9 @@ tests:
                     resources:
                       limits:
                         cpu: 500m
+  - it: should be empty when no resourceClasses are set
+    set:
+      agent.resourceClasses: {}
+    asserts:
+     - hasDocuments:
+        count: 0
