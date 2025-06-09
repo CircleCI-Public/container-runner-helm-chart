@@ -1,3 +1,4 @@
+{{- if .Values.agent.resourceClasses }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -18,3 +19,4 @@ data:
     serviceContainers:
       {{- toYaml .Values.agent.serviceContainers | nindent 6 }}
     {{- end }}
+{{- end }}
