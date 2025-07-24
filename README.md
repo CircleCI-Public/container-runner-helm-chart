@@ -103,8 +103,19 @@ The command removes all the Kubernetes objects associated with the chart and del
 | agent.terminationGracePeriodSeconds | int | `18300` | Tasks are drained during the termination grace period, so this should be sufficiently long relative to the maximum run time to ensure graceful shutdown |
 | agent.tolerations | list | `[]` | Node tolerations for agent scheduling to nodes with taints Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/ |
 | logging | object | `{"image":{"registry":"","repository":"circleci/logging-collector","tag":3},"rbac":{"create":true,"role":{"name":"logging-collector","rules":[]}},"serviceAccount":{"annotations":{},"create":true,"name":"logging-collector","secret":{"name":"logging-collector-token"}}}` | Configuration values for the logging containers. These containers run alongside service containers and stream their logs to the CircleCI UI |
-| logging.serviceAccount | object | `{"annotations":{},"create":true,"name":"logging-collector","secret":{"name":"logging-collector-token"}}` | A service account with minimal permissions to collect the service container logs |
-| logging.serviceAccount.secret | object | `{"name":"logging-collector-token"}` | The secret containing the service account token |
+| logging.image.registry | string | `""` | Container registry for the logging collector image |
+| logging.image.repository | string | `"circleci/logging-collector"` | Repository name for the logging collector image |
+| logging.image.tag | int | `3` | Image tag for the logging collector. Should match container agent version to ensure compatibility. |
+| logging.rbac | object | `{"create":true,"role":{"name":"logging-collector","rules":[]}}` | RBAC configuration for the logging collector service account |
+| logging.rbac.create | bool | `true` | Whether to create RBAC resources |
+| logging.rbac.role.name | string | `"logging-collector"` | Name of the role |
+| logging.rbac.role.rules | list | `[]` | Additional rules for the role See https://circleci.com/docs/container-runner/#container-permissions for minimal required permissions |
+| logging.serviceAccount | object | `{"annotations":{},"create":true,"name":"logging-collector","secret":{"name":"logging-collector-token"}}` | Service account for the logging collector container that gets mounted in task pods when service containers are present. Requires minimal permissions to collect service container logs. |
+| logging.serviceAccount.annotations | object | `{}` | Annotations to add to the service account |
+| logging.serviceAccount.create | bool | `true` | Whether to create the service account |
+| logging.serviceAccount.name | string | `"logging-collector"` | Name of the service account |
+| logging.serviceAccount.secret | object | `{"name":"logging-collector-token"}` | Secret containing the service account token that gets mounted in the logging container of the task pod when service containers are present |
+| logging.serviceAccount.secret.name | string | `"logging-collector-token"` | Name of the secret containing the token |
 | orchestrator | object | `{"image":{"digest":"","registry":"","repository":"","tag":""}}` | Configures the orchestrator init container, which initializes the primary container environment. For more details, see the runner-init project's [README](https://github.com/circleci/runner-init?tab=readme-ov-file#runner-init--goat). |
 | orchestrator.image | object | `{"digest":"","registry":"","repository":"","tag":""}` | Specify the image reference for the orchestrator container. Defaults to [circleci/runner-init:agent](https://hub.docker.com/r/circleci/runner-init/tags). This setting allows configuration for a private registry, or an air-gapped environment on CircleCI server. Note that the image digest takes precedence over the tag. If left empty, the container-agent app will automatically set the image reference. |
 | proxy | object | `{"enabled":false,"http":{"auth":{"enabled":false,"password":null,"username":null},"host":"proxy.example.com","port":3128},"https":{"auth":{"enabled":false,"password":null,"username":null},"host":"proxy.example.com","port":3128},"no_proxy":[]}` | Proxy Support for Container Agent |
