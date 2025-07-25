@@ -99,6 +99,11 @@ spec:
               value: {{- if ne .loggingLevel nil }} {{ .loggingLevel | quote }} {{- else }} {{ .log.level | quote }} {{- end }}
             - name: O11Y_FORMAT
               value: {{ .log.format | quote }}
+            - name: KUBE_META_DATA_NAME
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.name
 
             # GC configuration settings
             - name: KUBE_GC_ENABLED
