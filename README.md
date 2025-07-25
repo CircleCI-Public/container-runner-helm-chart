@@ -77,7 +77,9 @@ The command removes all the Kubernetes objects associated with the chart and del
 | agent.maxRunTime | string | `"5h"` |  |
 | agent.name | string | `""` | A (preferably) unique name assigned to this particular container-agent instance. This name will appear in your runners inventory page in the CircleCI UI. If left unspecified, the name will default to the name of the deployment. |
 | agent.nodeSelector | object | `{}` | Node labels for agent pod assignment Ref: https://kubernetes.io/docs/user-guide/node-selection/ |
-| agent.pdb | object | `{"create":false,"maxUnavailable":1,"minAvailable":1}` | Pod disruption budget settings |
+| agent.pdb.create | string | `false` | Create a pod disruption budget |
+| agent.pdb.minAvailable | string | `1` | Minimum available pods set in PodDisruptionBudget. Define either 'minAvailable' or 'maxUnavailable', never both. |
+| agent.pdb.maxUnavailable | string | `null` | Maximum unavailable pods set in PodDisruptionBudget. If set, 'minAvailable' is ignored. |
 | agent.podAnnotations | object | `{}` | Annotations to be added to agent pods |
 | agent.podSecurityContext | object | `{}` | Security Context policies for agent pods |
 | agent.pullSecrets | list | `[]` |  |

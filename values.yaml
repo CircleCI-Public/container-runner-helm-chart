@@ -135,10 +135,14 @@ agent:
   #     topologyKey: "kubernetes.io/hostname"
 
   # -- Pod disruption budget settings
+  # Ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
   pdb:
     create: false
+    # -- Minimum available pods set in PodDisruptionBudget.
+    # Define either 'minAvailable' or 'maxUnavailable', never both.
     minAvailable: 1
-    maxUnavailable: 1
+    # -- Maximum unavailable pods set in PodDisruptionBudget. If set, 'minAvailable' is ignored.
+    # maxUnavailable: 1
 
   # -- CircleCI Runner API URL
   runnerAPI: "https://runner.circleci.com"

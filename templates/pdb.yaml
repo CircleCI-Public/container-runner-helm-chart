@@ -4,12 +4,11 @@ kind: PodDisruptionBudget
 metadata:
   name: {{ template "container-agent.fullname" . }}
 spec:
-{{- if .Values.agent.pdb.minAvailable }}
+  {{- if and .Values.agent.pdb.minAvailable (not (hasKey .Values.agent.pdb "maxUnavailable")) }}
   minAvailable: {{ .Values.agent.pdb.minAvailable }}
-{{- end }}
-{{- if .Values.agent.pdb.maxUnavailable }}
+  {{- else if .Values.agent.pdb.maxUnavailable }}
   maxUnavailable: {{ .Values.agent.pdb.maxUnavailable }}
-{{- end }}
+  {{- end }}
   selector:
     matchLabels:
       {{- toYaml .Values.agent.matchLabels | nindent 6 }}
