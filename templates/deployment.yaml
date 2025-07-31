@@ -99,7 +99,7 @@ spec:
               value: {{- if ne .loggingLevel nil }} {{ .loggingLevel | quote }} {{- else }} {{ .log.level | quote }} {{- end }}
             - name: O11Y_FORMAT
               value: {{ .log.format | quote }}
-            - name: KUBE_META_DATA_NAME
+            - name: KUBE_CONTAINER_AGENT_INSTANCE
               valueFrom:
                 fieldRef:
                   apiVersion: v1
