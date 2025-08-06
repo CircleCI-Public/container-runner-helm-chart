@@ -1,0 +1,69 @@
+suite: test pod disruption budget
+templates:
+  - pdb.yaml
+tests:
+  - it: should not create a pod disruption budget by default
+    asserts:
+      - notExists:
+          kind: PodDisruptionBudget
+
+  - it: should create a pod disruption budget when enabled
+    set:
+      agent:
+        pdb:
+          create: true
+    asserts:
+      - exists:
+          kind: PodDisruptionBudget
+      - equal:
+          path: spec.minAvailable
+          value: 1
+      - equal:
+          path: spec.selector.matchLabels.app
+          value: container-agent
+
+  - it: should set minAvailable when specified
+    set:
+      agent:
+        pdb:
+          create: true
+          minAvailable: 3
+    asserts:
+      - exists:
+          kind: PodDisruptionBudget
+      - equal:
+          path: spec.minAvailable
+          value: 3
+      - notExists:
+          path: spec.maxUnavailable
+
+  - it: should set maxUnavailable when specified
+    set:
+      agent:
+        pdb:
+          create: true
+          maxUnavailable: 2
+    asserts:
+      - exists:
+          kind: PodDisruptionBudget
+      - equal:
+          path: spec.maxUnavailable
+          value: 2
+      - notExists:
+          path: spec.minAvailable
+
+  - it: should prefer maxUnavailable if both minAvailable and maxUnavailable are set
+    set:
+      agent:
+        pdb:
+          create: true
+          minAvailable: 2
+          maxUnavailable: 3
+    asserts:
+      - exists:
+          kind: PodDisruptionBudget
+      - equal:
+          path: spec.maxUnavailable
+          value: 3
+      - notExists:
+          path: spec.minAvailable
