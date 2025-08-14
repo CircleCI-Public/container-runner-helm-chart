@@ -1,7 +1,13 @@
 # Container Agent Helm Chart Changelog
 
 # Edge
+
+
+# 101.1.4
+
 [#86](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/87) Added `KUBE_CONTAINER_AGENT_INSTANCE` as an environment variable so container agent is aware of its pod name.
+
+# 101.1.3
 
 [#71](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/71) Added an option to configure the image name for the orchestrator container, enabling hosting in a private registry or an air-gapped environment on CircleCI server. See the [runner-init repository](https://github.com/circleci/runner-init) for more information.
 
