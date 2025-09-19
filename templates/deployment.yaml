@@ -105,6 +105,11 @@ spec:
               value: {{- if ne .loggingLevel nil }} {{ .loggingLevel | quote }} {{- else }} {{ .log.level | quote }} {{- end }}
             - name: O11Y_FORMAT
               value: {{ .log.format | quote }}
+            - name: KUBE_CONTAINER_AGENT_INSTANCE
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.name
 
             # GC configuration settings
             - name: KUBE_GC_ENABLED
@@ -113,6 +118,17 @@ spec:
               value: {{- if .kubeGCThreshold }} {{ .kubeGCThreshold | quote }} {{- else }} {{ .gc.threshold | quote }} {{- end }}
             - name: KUBE_GC_INTERVAL
               value: {{ .gc.interval | quote }}
+            {{- end }}
+
+            {{- with .Values.orchestrator }}
+            # Settings for the orchestrator init container
+
+            {{- $imageRef := include "image.ref" .image -}}
+            {{- if ne $imageRef "" }}
+            - name: KUBE_RUNNER_INIT_IMAGE
+              value: {{ $imageRef | quote }}
+            {{- end }}
+
             {{- end }}
 
             {{- if .Values.agent.ssh.enabled }}

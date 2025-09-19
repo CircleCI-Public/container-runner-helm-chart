@@ -1,0 +1,36 @@
+suite: test orchestrator
+tests:
+  - it: does not set KUBE_RUNNER_INIT_IMAGE by default
+    template: templates/deployment.yaml
+    asserts:
+      - notContains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: KUBE_RUNNER_INIT_IMAGE
+            value: ""
+
+  - it: sets KUBE_RUNNER_INIT_IMAGE when image reference is configured
+    template: templates/deployment.yaml
+    set:
+      orchestrator.image.registry: "docker.io"
+      orchestrator.image.repository: "circleci/runner-init"
+      orchestrator.image.tag: "agent"
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: KUBE_RUNNER_INIT_IMAGE
+            value: "docker.io/circleci/runner-init:agent"
+
+  - it: prioritizes image digest over tag for KUBE_RUNNER_INIT_IMAGE
+    template: templates/deployment.yaml
+    set:
+      orchestrator.image.repository: "circleci/runner-init"
+      orchestrator.image.tag: "agent"
+      orchestrator.image.digest: "sha256:ad37370eda4b7bd77b6c539c41276d25de5451a9f6092b296503ea94466cbbe4"
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: KUBE_RUNNER_INIT_IMAGE
+            value: "circleci/runner-init@sha256:ad37370eda4b7bd77b6c539c41276d25de5451a9f6092b296503ea94466cbbe4"

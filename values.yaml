@@ -291,7 +291,20 @@ agent:
     # -- Specify the total number of ports for SSH. This, along with `agent.ssh.startPort`, sets the port range.
     # Note that the number of concurrent jobs rerun using SSH will be limited by the size of this range.
     numPorts: 20
-    
+
+# -- Configures the orchestrator init container, which initializes the primary container environment.
+# For more details, see the runner-init project's [README](https://github.com/circleci/runner-init?tab=readme-ov-file#runner-init--goat).
+orchestrator:
+  # -- Specify the image reference for the orchestrator container. Defaults to [circleci/runner-init:agent](https://hub.docker.com/r/circleci/runner-init/tags).
+  # This setting allows configuration for a private registry, or an air-gapped environment on CircleCI server.
+  # Note that the image digest takes precedence over the tag.
+  # If left empty, the container-agent app will automatically set the image reference.
+  image:
+    registry: ""
+    repository: ""
+    tag: ""
+    digest: ""
+
 # -- Kubernetes service account settings
 serviceAccount:
   create: true
@@ -313,24 +326,38 @@ rbac:
 # These containers run alongside service containers and stream their logs to the CircleCI UI
 logging:
   image:
+    # -- Container registry for the logging collector image
     registry: ""
+    # -- Repository name for the logging collector image
     repository: "circleci/logging-collector"
+    # -- Image tag for the logging collector. Should match container agent version to ensure compatibility.
     tag: 3
 
-  # -- A service account with minimal permissions to collect the service container logs
+  # -- Service account for the logging collector container that gets mounted in task pods
+  # when service containers are present. Requires minimal permissions to collect service container logs.
   serviceAccount:
+    # -- Whether to create the service account
     create: true
+    # -- Name of the service account
     name: "logging-collector"
+    # -- Annotations to add to the service account
     annotations: {}
 
-    # -- The secret containing the service account token
+    # -- Secret containing the service account token that gets mounted in the logging container
+    # of the task pod when service containers are present
     secret:
+      # -- Name of the secret containing the token
       name: "logging-collector-token"
 
+  # -- RBAC configuration for the logging collector service account
   rbac:
+    # -- Whether to create RBAC resources
     create: true
     role:
+      # -- Name of the role
       name: "logging-collector"
+      # -- Additional rules for the role
+      # See https://circleci.com/docs/container-runner/#container-permissions for minimal required permissions
       rules: []
 
 # -- Proxy Support for Container Agent

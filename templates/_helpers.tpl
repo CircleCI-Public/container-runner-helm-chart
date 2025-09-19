@@ -115,3 +115,33 @@ remainder of arguments
 - name: no_proxy
   value: {{ join "," $noProxy | quote }}
 {{- end }}
+
+{{/*
+`image.ref` constructs a full image reference based on the provided registry, repository, tag, and digest values.
+It only includes parts of the reference that are provided, producing an empty string if the repository is not specified.
+*/}}
+{{- define "image.ref" -}}
+  {{- $registry := .registry -}}
+  {{- $repository := .repository -}}
+  {{- $tag := .tag -}}
+  {{- $digest := .digest -}}
+
+  {{- $image := "" -}}
+  {{- if $registry -}}
+    {{- $image = printf "%s/" $registry -}}
+  {{- end -}}
+
+  {{- if $repository -}}
+    {{- $image = printf "%s%s" $image $repository -}}
+    {{- if $digest -}}
+      {{- if not (regexMatch "^[a-zA-Z0-9]+:" $digest) -}}
+        {{- $digest = printf "sha256:%s" $digest -}}
+      {{- end -}}
+      {{- $image = printf "%s@%s" $image $digest -}}
+    {{- else if $tag -}}
+      {{- $image = printf "%s:%s" $image $tag -}}
+    {{- end -}}
+  {{- end -}}
+
+  {{- $image -}}
+{{- end -}}
