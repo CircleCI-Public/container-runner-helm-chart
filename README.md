@@ -2,7 +2,7 @@
 
 For deploying a CircleCI Container Agent
 
-![Version: 101.1.4](https://img.shields.io/badge/Version-101.1.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 3](https://img.shields.io/badge/AppVersion-3-informational?style=flat-square)
+![Version: 101.1.5](https://img.shields.io/badge/Version-101.1.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 3.1.6](https://img.shields.io/badge/AppVersion-3.1.6-informational?style=flat-square)
 
 ## Support
 
@@ -68,7 +68,7 @@ The command removes all the Kubernetes objects associated with the chart and del
 | agent.gc.enabled | bool | `true` | Enable garbage collection (GC) of Kubernetes objects such as Pods or Secrets left over from CircleCI tasks. Dangling objects may occur if container runner is forcefully deleted, causing the task state-tracking to be lost. GC will only remove objects labelled with `app.kubernetes.io/managed-by=circleci-container-agent`. |
 | agent.gc.interval | string | `"3m"` | Frequency of GC runs. Adjust this to balance minimal lingering K8s resources vs. system load. Infrequent runs may reduce the load but could result in excess K8s resources, while frequent runs help minimize resources but could increase system load. |
 | agent.gc.threshold | string | `"5h5m"` | The age of a Kubernetes object managed by container agent before GC deletes it. This value should be slightly longer than the `agent.maxRunTime` to prevent premature removal. GC may remove some objects sooner than this threshold, such as task Pod containers that fail their liveness probe. |
-| agent.image | object | `{"digest":"","pullPolicy":"Always","registry":"","repository":"circleci/runner-agent","tag":"kubernetes-3"}` | Agent image settings. NOTE: Setting an image digest will take precedence over the image tag |
+| agent.image | object | `{"digest":"","pullPolicy":"Always","registry":"","repository":"circleci/runner-agent","tag":"kubernetes-3.1.6-7782-501cbf8"}` | Agent image settings. NOTE: Setting an image digest will take precedence over the image tag |
 | agent.livenessProbe | object | `{"failureThreshold":5,"httpGet":{"path":"/live","port":7623,"scheme":"HTTP"},"initialDelaySeconds":10,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":1}` | Liveness and readiness probe values Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes |
 | agent.log.format | string | `"json"` | Set the logging format for the container-agent app. Possible values are `text`, `color`, `json`, and `none`. |
 | agent.log.level | string | `"info"` | Set the logging level for the container-agent app. Possible values are `debug`, `info`, `warn`, and `error`. Note: this setting isn't to be confused with the [logging sidecar container](https://circleci.com/docs/container-runner/#logging-containers) which is configured under the top-level `logging` key. |
@@ -102,10 +102,10 @@ The command removes all the Kubernetes objects associated with the chart and del
 | agent.ssh.startPort | int | `54782` | Define the start port for SSH. This, combined with `agent.ssh.numPorts`, is used to define a range of ports. Be aware that you may need to configure your firewall or security groups to allow this port range. |
 | agent.terminationGracePeriodSeconds | int | `18300` | Tasks are drained during the termination grace period, so this should be sufficiently long relative to the maximum run time to ensure graceful shutdown |
 | agent.tolerations | list | `[]` | Node tolerations for agent scheduling to nodes with taints Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/ |
-| logging | object | `{"image":{"registry":"","repository":"circleci/logging-collector","tag":3},"rbac":{"create":true,"role":{"name":"logging-collector","rules":[]}},"serviceAccount":{"annotations":{},"create":true,"name":"logging-collector","secret":{"name":"logging-collector-token"}}}` | Configuration values for the logging containers. These containers run alongside service containers and stream their logs to the CircleCI UI |
+| logging | object | `{"image":{"registry":"","repository":"circleci/logging-collector","tag":"3.1.6-7782-501cbf8"},"rbac":{"create":true,"role":{"name":"logging-collector","rules":[]}},"serviceAccount":{"annotations":{},"create":true,"name":"logging-collector","secret":{"name":"logging-collector-token"}}}` | Configuration values for the logging containers. These containers run alongside service containers and stream their logs to the CircleCI UI |
 | logging.image.registry | string | `""` | Container registry for the logging collector image |
 | logging.image.repository | string | `"circleci/logging-collector"` | Repository name for the logging collector image |
-| logging.image.tag | int | `3` | Image tag for the logging collector. Should match container agent version to ensure compatibility. |
+| logging.image.tag | string | `"3.1.6-7782-501cbf8"` | Image tag for the logging collector. Should match container agent version to ensure compatibility. |
 | logging.rbac | object | `{"create":true,"role":{"name":"logging-collector","rules":[]}}` | RBAC configuration for the logging collector service account |
 | logging.rbac.create | bool | `true` | Whether to create RBAC resources |
 | logging.rbac.role.name | string | `"logging-collector"` | Name of the role |
