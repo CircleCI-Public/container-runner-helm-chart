@@ -2,6 +2,8 @@
 
 # Edge
 
+# 101.1.5
+[#93](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/93) Specify full appVersion and container tags against latest release.
 
 # 101.1.4
 

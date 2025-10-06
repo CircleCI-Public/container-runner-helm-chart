@@ -12,7 +12,7 @@ agent:
     registry: ""
     repository: "circleci/runner-agent"
     pullPolicy: Always
-    tag: "kubernetes-3"
+    tag: "kubernetes-3.1.6-7782-501cbf8"
     digest: ""
 
   pullSecrets: []
@@ -299,6 +299,8 @@ orchestrator:
   # This setting allows configuration for a private registry, or an air-gapped environment on CircleCI server.
   # Note that the image digest takes precedence over the tag.
   # If left empty, the container-agent app will automatically set the image reference.
+  # It is highly recommended to set up a pull through cache or similar to ensure the image remains
+  # up-to-date with the upstream CircleCI repository to ensure compatibility.
   image:
     registry: ""
     repository: ""
@@ -331,7 +333,7 @@ logging:
     # -- Repository name for the logging collector image
     repository: "circleci/logging-collector"
     # -- Image tag for the logging collector. Should match container agent version to ensure compatibility.
-    tag: 3
+    tag: 3.1.6-7782-501cbf8
 
   # -- Service account for the logging collector container that gets mounted in task pods
   # when service containers are present. Requires minimal permissions to collect service container logs.

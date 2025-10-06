@@ -27,11 +27,9 @@ tests:
 
   - it: should have the default logging collector configuration
     asserts:
-      - contains:
-          path: spec.template.spec.containers[0].env
-          content:
-            name: KUBE_LOGGING_IMAGE
-            value: "circleci/logging-collector:3"
+      - matchRegex:
+          path: "spec.template.spec.containers[0].env[?(@.name=='KUBE_LOGGING_IMAGE')].value"
+          pattern: "^circleci/logging-collector:3\.[0-9]+\.[0-9]+-[0-9]+-[a-f0-9]+$"
       - contains:
           path: spec.template.spec.containers[0].env
           content:
