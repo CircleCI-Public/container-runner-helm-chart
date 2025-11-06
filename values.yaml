@@ -300,6 +300,16 @@ orchestrator:
     repository: ""
     tag: ""
     digest: ""
+  # -- Override the default resource limits and requests for the orchestrator init container.
+  # These default to 10m CPU / 32Mi memory requests and 50m CPU / 64Mi memory limits.
+  # resources:
+  #   requests:
+  #     cpu: 10m
+  #     memory: 32Mi
+  #   limits:
+  #     cpu: 50m
+  #     memory: 64Mi
+  resources: {}
 
 # -- Kubernetes service account settings
 serviceAccount:
