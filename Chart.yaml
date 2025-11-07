@@ -4,6 +4,6 @@ description: For deploying a CircleCI Container Agent
 icon: https://raw.githubusercontent.com/circleci/media/master/logo/build/horizontal_dark.1.png
 type: application
 
-version: "101.1.5"
-appVersion: "3.1.6"
+version: "101.1.6"
+appVersion: "3.1.7"
 kubeVersion: ">= 1.25-0"
