@@ -3,6 +3,12 @@ version: 2.1
 orbs:
   slack: circleci/slack@4.12.5
 
+parameters:
+  smoke_tests_branch:
+    description: "The branch in the `runner-smoke-tests` repo to run the smoke tests against."
+    type: string
+    default: "main"
+
 workflows:
   main-workflow:
     jobs:
@@ -55,6 +61,8 @@ jobs:
 
   smoke-tests:
     executor: go
+    environment:
+      SMOKE_TESTS_BRANCH: "<< pipeline.parameters.smoke_tests_branch >>"
     steps:
       - checkout
       - run:
