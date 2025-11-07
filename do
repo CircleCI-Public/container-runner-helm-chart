@@ -71,7 +71,7 @@ help_kubeconform="Run helm kubeconform"
 kubeconform() {
     if ! helm plugin list | grep kubeconform >/dev/null; then
         echo 'Installing helm kubeconform'
-        helm plugin install https://github.com/jtyr/kubeconform-helm
+        helm plugin install https://github.com/jtyr/kubeconform-helm.git
     fi
 
     helm kubeconform --ignore-missing-schema --verbose --summary --strict "$@" \

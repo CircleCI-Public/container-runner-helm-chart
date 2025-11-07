@@ -54,3 +54,43 @@ tests:
                     resources:
                       limits:
                         cpu: 500m
+
+  - it: should not include runnerInitResources by default
+    set:
+      agent.resourceClasses:
+        acme-corp/road-runner:
+          token: shhh-its-a-secret
+    asserts:
+      - equal:
+          path: data
+          value:
+            taskpods: |
+              resourceClasses:
+                acme-corp.road-runner:
+
+  - it: should set runnerInitResources when orchestrator resources are overridden
+    set:
+      agent.resourceClasses:
+        acme-corp/road-runner:
+          token: shhh-its-a-secret
+      orchestrator.resources:
+        requests:
+          cpu: 100m
+          memory: 128Mi
+        limits:
+          cpu: 200m
+          memory: 256Mi
+    asserts:
+      - equal:
+          path: data
+          value:
+            taskpods: |
+              resourceClasses:
+                acme-corp.road-runner:
+              runnerInitResources:
+                limits:
+                  cpu: 200m
+                  memory: 256Mi
+                requests:
+                  cpu: 100m
+                  memory: 128Mi
