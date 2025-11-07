@@ -2,6 +2,10 @@
 
 # Edge
 
+# 101.1.6
+- [#95](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/95) Upgraded the container-agent app image to version `3.1.7`
+- [#94](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/94) Exposed the orchestrator init container resource requirements in the values files.
+
 # 101.1.5
 [#93](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/93) Specify full appVersion and container tags against latest release.
 
