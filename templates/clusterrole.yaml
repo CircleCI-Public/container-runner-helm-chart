@@ -1,8 +1,10 @@
 {{- if .Values.agent.autodetectPlatform }}
 {{- $clusterRole :=  .Values.rbac.clusterRole }}
-{{- $clusterRoleName := $clusterRole.name | quote }}
 {{- $fullname := include "container-agent.fullname" . }}
-{{- $name := printf "%s:%s" $fullname $clusterRoleName | quote }}
+{{- $name := $fullname }}
+{{- if $clusterRole.name }}
+{{- $name = printf "%s:%s" $fullname $clusterRole.name }}
+{{- end }}
 {{- $serviceAccountName := include "container-agent.serviceAccountName" . }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
