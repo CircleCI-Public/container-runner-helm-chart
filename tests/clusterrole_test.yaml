@@ -1,0 +1,17 @@
+suite: test clusterrole
+tests:
+  - it: should be empty by default
+    template: templates/clusterrole.yaml
+    asserts:
+      - equal:
+          path: metadata.name
+          value: "RELEASE-NAME-container-agent"
+
+  - it: should be overrideable
+    template: templates/clusterrole.yaml
+    set:
+      rbac.clusterRole.name: foo
+    asserts:
+      - equal:
+          path: metadata.name
+          value: "RELEASE-NAME-container-agent:foo"
