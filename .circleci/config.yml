@@ -39,7 +39,7 @@ executors:
       - image: cimg/deploy:2025.01
   ruby:
     docker:
-      - image: cimg/ruby:3.4.4
+      - image: cimg/ruby:3.4.8
   go:
     docker:
       - image: cimg/go:1.22
