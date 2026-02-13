@@ -2,6 +2,10 @@
 
 # Edge
 
+# 101.1.7
+- Upgraded the container-agent app image to version `3.1.8`
+- [#98](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/98) Fixed ClusterRole name formatting without quotes.
+
 # 101.1.6
 - [#95](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/95) Upgraded the container-agent app image to version `3.1.7`
 - [#94](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/94) Exposed the orchestrator init container resource requirements in the values files.
