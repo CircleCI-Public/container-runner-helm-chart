@@ -2,7 +2,7 @@
 
 For deploying a CircleCI Container Agent
 
-![Version: 101.1.6](https://img.shields.io/badge/Version-101.1.6-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 3.1.7](https://img.shields.io/badge/AppVersion-3.1.7-informational?style=flat-square)
+![Version: 101.1.7](https://img.shields.io/badge/Version-101.1.7-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 3.1.8](https://img.shields.io/badge/AppVersion-3.1.8-informational?style=flat-square)
 
 ## Support
 
