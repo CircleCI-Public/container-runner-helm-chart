@@ -12,7 +12,7 @@ agent:
     registry: ""
     repository: "circleci/runner-agent"
     pullPolicy: Always
-    tag: "kubernetes-3.1.7-7995-c2d711f"
+    tag: "kubernetes-3.1.8-8524-872f9d7"
     digest: ""
 
   pullSecrets: []
