@@ -42,7 +42,7 @@ executors:
       - image: cimg/ruby:3.4.4
   go:
     docker:
-      - image: cimg/go:1.22
+      - image: cimg/go:1.26
   gh:
     docker:
       - image: maniator/gh:latest
