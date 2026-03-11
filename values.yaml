@@ -189,6 +189,10 @@ agent:
   # As Kubernetes does not allow / in secret keys, a period (.) should be substituted instead
   customSecret: ""
 
+  # -- Option to use an existing ConfigMap instead of creating one from resourceClasses.
+  # If set, no ConfigMap will be rendered by this chart.
+  existingConfigMap: ""
+
   # -- Resource class settings. The tokens specified here will be used to claim tasks & the tasks
   # will be launched with the configured configs
   # Ref: https://circleci.com/docs/container-runner/#resource-class-configuration-custom-pod
