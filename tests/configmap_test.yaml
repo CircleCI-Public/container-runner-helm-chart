@@ -101,3 +101,13 @@ tests:
     asserts:
      - hasDocuments:
         count: 0
+
+  - it: should be empty when existingConfigMap is set
+    set:
+      agent.resourceClasses:
+        acme-corp/road-runner:
+          token: shhh-its-a-secret
+      agent.existingConfigMap: my-custom-configmap
+    asserts:
+      - hasDocuments:
+          count: 0

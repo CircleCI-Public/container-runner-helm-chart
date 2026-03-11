@@ -2,7 +2,7 @@
 
 # Edge
 
-[#81](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/81) Don't render ConfigMap if `agent.resourceClasses` is unset. This allows you to template your own configmap.
+[#81](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/81) Added `agent.existingConfigMap` to skip rendering the ConfigMap and use your own instead.
 
 # 101.1.7
 - Upgraded the container-agent app image to version `3.1.8`

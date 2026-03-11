@@ -64,6 +64,7 @@ The command removes all the Kubernetes objects associated with the chart and del
 | agent.containerSecurityContext | object | `{}` | Security Context policies for agent containers |
 | agent.customSecret | string | `""` | Name of the user provided secret containing resource class tokens. You can mix tokens from this secret and in the secret created from tokens specified in the resourceClasses section below Ref: https://circleci.com/docs/container-runner/#custom-secret  The tokens should be specified as secret key-value pairs of the form ResourceClass: Token The resource class name needs to match the names configured below exactly to match tokens to the correct configuration As Kubernetes does not allow / in secret keys, a period (.) should be substituted instead |
 | agent.environment | object | `{}` | A dictionary of key-value pairs to set as environment variables in the container-agent app container. Note that this does not set environment variables in a task, which can be done via `agent.resourceClasses` or [in CircleCI](https://circleci.com/docs/set-environment-variable). |
+| agent.existingConfigMap | string | `""` | Option to use an existing ConfigMap instead of creating one from resourceClasses. If set, no ConfigMap will be rendered by this chart. |
 | agent.forceUpdate | bool | `false` | Force a rolling update of the agent deployment |
 | agent.gc.enabled | bool | `true` | Enable garbage collection (GC) of Kubernetes objects such as Pods or Secrets left over from CircleCI tasks. Dangling objects may occur if container runner is forcefully deleted, causing the task state-tracking to be lost. GC will only remove objects labelled with `app.kubernetes.io/managed-by=circleci-container-agent`. |
 | agent.gc.interval | string | `"3m"` | Frequency of GC runs. Adjust this to balance minimal lingering K8s resources vs. system load. Infrequent runs may reduce the load but could result in excess K8s resources, while frequent runs help minimize resources but could increase system load. |
@@ -90,7 +91,7 @@ The command removes all the Kubernetes objects associated with the chart and del
 | agent.readinessProbe.successThreshold | int | `1` |  |
 | agent.readinessProbe.timeoutSeconds | int | `1` |  |
 | agent.replicaCount | int | `1` |  |
-| agent.resourceClasses | object | `{}` | Resource class settings. The tokens specified here will be used to claim tasks & the tasks will be launched with the configured configs If you leave this unset you must provide your own configmap named {{ include "container-agent.fullname" . }} Ref: https://circleci.com/docs/container-runner/#resource-class-configuration-custom-pod |
+| agent.resourceClasses | object | `{}` | Resource class settings. The tokens specified here will be used to claim tasks & the tasks will be launched with the configured configs Ref: https://circleci.com/docs/container-runner/#resource-class-configuration-custom-pod |
 | agent.resources | object | `{}` | Agent pod resource configuration Ref: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/ |
 | agent.runnerAPI | string | `"https://runner.circleci.com"` | CircleCI Runner API URL |
 | agent.serviceContainers | object | `{}` | Configuration for service containers. This allows different a different container spec to be passed to your job's service containers. TODO: Full docs link |

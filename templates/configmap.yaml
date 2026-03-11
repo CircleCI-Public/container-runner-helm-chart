@@ -1,4 +1,4 @@
-{{- if .Values.agent.resourceClasses }}
+{{- if and .Values.agent.resourceClasses (not .Values.agent.existingConfigMap) }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
