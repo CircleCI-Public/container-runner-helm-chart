@@ -36,7 +36,7 @@ workflows:
 executors:
   helm:
     docker:
-      - image: cimg/deploy:2025.01
+      - image: cimg/deploy:2026.02
   ruby:
     docker:
       - image: cimg/ruby:3.4.4
