@@ -42,7 +42,7 @@ spec:
       volumes:
         - name: taskpod-config
           configMap:
-            name: {{ include "container-agent.fullname" . }}
+            name: {{ .Values.agent.existingConfigMap | default (include "container-agent.fullname" .) }}
       containers:
         - name: {{ .Chart.Name }}
           {{- with .Values.agent.image }}
