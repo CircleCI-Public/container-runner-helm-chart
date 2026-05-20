@@ -12,7 +12,7 @@ agent:
     registry: ""
     repository: "circleci/runner-agent"
     pullPolicy: Always
-    tag: "kubernetes-3.1.8-8524-872f9d7"
+    tag: "kubernetes-edge"
     digest: ""
 
   pullSecrets: []
@@ -341,7 +341,7 @@ logging:
     # -- Repository name for the logging collector image
     repository: "circleci/logging-collector"
     # -- Image tag for the logging collector. Should match container agent version to ensure compatibility.
-    tag: 3.1.7-7995-c2d711f
+    tag: edge
 
   # -- Service account for the logging collector container that gets mounted in task pods
   # when service containers are present. Requires minimal permissions to collect service container logs.
