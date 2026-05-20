@@ -2,7 +2,9 @@
 
 # Edge
 
-[#81](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/81) Added `agent.existingConfigMap` to skip rendering the ConfigMap and use your own instead.
+# 101.1.8
+- Upgraded the container-agent app image to version `3.1.9`
+- [#103](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/103) Added `agent.existingConfigMap` to skip rendering the ConfigMap and use your own instead.
 
 # 101.1.7
 - Upgraded the container-agent app image to version `3.1.8`
