@@ -20,6 +20,12 @@ agent:
   matchLabels:
     app: container-agent
 
+  # -- Annotations to be added to the deployment
+  deploymentAnnotations: {}
+
+  # -- Labels to be added to the deployment
+  deploymentLabels: {}
+
   # -- Annotations to be added to agent pods
   podAnnotations: {}
 
