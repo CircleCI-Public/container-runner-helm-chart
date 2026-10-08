@@ -1,6 +1,7 @@
 # Container Agent Helm Chart Changelog
 
 # Edge
+- [#110](https://github.com/CircleCI-Public/container-runner-helm-chart/pull/110) SSH reruns: `TCPRoute` resources now use the `gateway.networking.k8s.io/v1` API version. Gateway API v1.6 or later is now required for SSH reruns.
 
 # 101.1.8
 - Upgraded the container-agent app image to version `3.1.9`

@@ -104,3 +104,17 @@ tests:
           path: spec.gatewayClassName
           value: "gwc"
         documentIndex: 0
+
+  - it: should create TCPRoute resources with the gateway.networking.k8s.io/v1 apiVersion
+    template: templates/ssh.yaml
+    set:
+      agent.ssh.enabled: true
+      agent.ssh.startPort: 22
+      agent.ssh.numPorts: 3
+    asserts:
+      - isAPIVersion:
+          of: gateway.networking.k8s.io/v1
+        documentSelector:
+          path: kind
+          value: TCPRoute
+          matchMany: true
