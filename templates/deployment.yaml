@@ -3,6 +3,12 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  {{- with .Values.agent.deploymentAnnotations }}
+  annotations: {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.agent.deploymentLabels }}
+  labels: {{- toYaml . | nindent 4 }}
+  {{- end }}
   name: {{ include "container-agent.fullname" . }}
 spec:
   replicas: {{ .Values.agent.replicaCount }}
